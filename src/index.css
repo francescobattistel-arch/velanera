@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #121212;
+  --color-ink-card: #161513;
+  --color-gold: #c9a24b;
+  --color-gold-light: #e7c977;
+  --color-gold-deep: #a07d2c;
+  --color-cream: #f3ead6;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+}
+
+@layer utilities {
+  .text-gold-gradient {
+    background: linear-gradient(
+      180deg,
+      var(--color-gold-light) 0%,
+      var(--color-gold) 55%,
+      var(--color-gold-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .tracking-luxe {
+    letter-spacing: 0.35em;
+  }
+
+  .hairline {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-gold) 50%,
+      transparent
+    );
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s ease,
+      transform 0.9s ease;
+  }
+
+  .fade-up.in {
+    opacity: 1;
+    transform: none;
+  }
+}
