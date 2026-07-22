@@ -58,8 +58,8 @@ export default function Booking() {
           <p className="text-cream/70">
             Reserve online and our team will confirm shortly. For same-day tables,
             please call{' '}
-            <a href="tel:+15550100" className="text-gold hover:underline">
-              +1 (555) 0100
+            <a href="tel:+447378513069" className="text-gold hover:underline">
+              07378 513069
             </a>
             .
           </p>

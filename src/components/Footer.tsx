@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 text-center">
         <Logo className="h-20 w-auto" />
         <p className="max-w-md text-sm text-cream/50">
-          Refined Mediterranean dining &amp; cocktails. Set sail with us for an
+          Refined Mediterranean dining &amp; cocktails. Join us for an
           unforgettable evening.
         </p>
         <div className="flex gap-6 text-xs tracking-[0.2em] text-cream/60 uppercase">

@@ -2,12 +2,7 @@ import Logo from './Logo'
 
 export default function Hero() {
   return (
-    <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-ink">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(201,162,75,0.18),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,#0a0a0a_0%,#100f0c_55%,#0a0a0a_100%)]" />
-      </div>
-
+    <section id="home" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
       <div className="mx-auto max-w-3xl px-6 text-center">
         <h1 className="mb-6 flex justify-center">
           <span className="sr-only">Velanera</span>
@@ -18,7 +13,7 @@ export default function Hero() {
         </p>
         <div className="hairline mx-auto my-8 h-px w-40" />
         <p className="mx-auto max-w-xl text-lg font-light text-cream/75">
-          Set sail into an evening of refined Mediterranean cuisine, crafted
+          Drift into an evening of refined Mediterranean cuisine, crafted
           cocktails, and golden-hour ambiance by the water.
         </p>
 

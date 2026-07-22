@@ -33,7 +33,7 @@ export default function Lounge() {
           <h2 className="text-4xl md:text-5xl">A lounge that moves with the tide</h2>
           <div className="hairline mx-auto my-7 h-px w-28" />
           <p className="text-cream/70">
-            Velanera means &ldquo;sailing ship.&rdquo; Our tables are your harbor for the
+            Named for the open sea, our tables are your harbor for the
             evening &mdash; where slow dinners drift into late-night cocktails, and every
             detail is set in gold against the dark.
           </p>

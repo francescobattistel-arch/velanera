@@ -1,7 +1,7 @@
 const hours = [
-  { day: 'Monday — Thursday', time: '17:00 — 00:00' },
-  { day: 'Friday — Saturday', time: '17:00 — 02:00' },
-  { day: 'Sunday', time: '13:00 — 23:00' },
+  { day: 'Kitchen', time: '7:00 PM — 10:00 PM' },
+  { day: 'Cocktail Bar', time: '6:00 PM — 12:00 AM' },
+  { day: 'Lounge', time: '10:00 PM — 3:00 AM' },
 ]
 
 export default function Contacts() {
@@ -18,19 +18,17 @@ export default function Contacts() {
           <div className="fade-up border border-gold/15 bg-ink-card/50 p-8">
             <h3 className="text-gold text-2xl">Visit</h3>
             <p className="mt-4 text-cream/70">
-              1 Harbour Promenade
+              130 Cromwell Road
               <br />
-              Marina District
-              <br />
-              Open-air terrace &amp; indoor lounge
+              London SW7 4ET
             </p>
           </div>
 
           <div className="fade-up border border-gold/15 bg-ink-card/50 p-8">
             <h3 className="text-gold text-2xl">Reach Us</h3>
             <p className="mt-4 space-y-2 text-cream/70">
-              <a href="tel:+15550100" className="block hover:text-gold">
-                +1 (555) 0100
+              <a href="tel:+447378513069" className="block hover:text-gold">
+                07378 513069
               </a>
               <a href="mailto:reservations@velanera.co" className="block hover:text-gold">
                 reservations@velanera.co
