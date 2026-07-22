@@ -1,15 +1,17 @@
+import loungeCollage from '../assets/lounge-collage.png'
+
 const features = [
   {
     title: 'The Kitchen',
     text: 'Seasonal Mediterranean plates built around the day&rsquo;s catch, wood-fired and finished with estate olive oil.',
   },
   {
-    title: 'The Bar',
+    title: 'The Cocktail Bar',
     text: 'Signature cocktails, rare spirits, and a curated coastal wine list poured until late.',
   },
   {
-    title: 'The Terrace',
-    text: 'Golden-hour seating by the water with live sets on weekends and an unhurried, elegant mood.',
+    title: 'The Lounge',
+    text: 'An exclusive priv&eacute; &mdash; champagne, low light, and golden-hour nights reserved for a chosen few.',
   },
 ]
 
@@ -50,6 +52,27 @@ export default function Lounge() {
               />
             </article>
           ))}
+        </div>
+
+        <div className="fade-up mt-24 grid items-center gap-10 md:grid-cols-2">
+          <div className="overflow-hidden border border-gold/15">
+            <img
+              src={loungeCollage}
+              alt="Velanera Lounge — an exclusive privé of champagne and golden-hour nights"
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <p className="mb-4 text-xs tracking-luxe text-gold/80 uppercase">Exclusive Privé</p>
+            <h2 className="text-4xl md:text-5xl">The Lounge</h2>
+            <div className="hairline my-7 h-px w-28" />
+            <p className="text-cream/70">
+              Beyond the kitchen and the cocktail bar lies the Velanera Lounge &mdash; our
+              exclusive priv&eacute;. Reserved tables, champagne on ice, and golden light
+              against the dark, kept intimate for a chosen few well into the night.
+            </p>
+          </div>
         </div>
 
         <div className="fade-up mt-24">

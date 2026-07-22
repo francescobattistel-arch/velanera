@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-gold/15 bg-ink-soft py-12">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 text-center">
-        <Logo />
+        <Logo className="h-20 w-auto" />
         <p className="max-w-md text-sm text-cream/50">
           Refined Mediterranean dining &amp; cocktails. Set sail with us for an
           unforgettable evening.

@@ -9,15 +9,13 @@ export default function Hero() {
       </div>
 
       <div className="mx-auto max-w-3xl px-6 text-center">
-        <div className="mb-8 flex justify-center">
-          <Logo showWordmark={false} className="[&_svg]:h-20 [&_svg]:w-20" />
-        </div>
-        <p className="mb-6 text-xs tracking-luxe text-gold/80 uppercase">
+        <h1 className="mb-6 flex justify-center">
+          <span className="sr-only">Velanera</span>
+          <Logo className="h-52 w-auto sm:h-64 md:h-72" />
+        </h1>
+        <p className="text-xs tracking-luxe text-gold/80 uppercase">
           Restaurant &middot; Lounge
         </p>
-        <h1 className="text-gold-gradient text-6xl leading-none sm:text-7xl md:text-8xl">
-          Velanera
-        </h1>
         <div className="hairline mx-auto my-8 h-px w-40" />
         <p className="mx-auto max-w-xl text-lg font-light text-cream/75">
           Set sail into an evening of refined Mediterranean cuisine, crafted
