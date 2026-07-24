@@ -6,6 +6,7 @@ const links = [
   { href: '#lounge', label: 'Lounge' },
   { href: '#booking', label: 'Booking' },
   { href: '#contacts', label: 'Contacts' },
+  { href: '#app', label: 'Get the App' },
 ]
 
 export default function Navbar() {
@@ -32,25 +33,21 @@ export default function Navbar() {
           <Logo />
         </a>
 
-        <ul className="hidden items-center gap-10 md:flex">
+        <ul className="hidden items-center gap-8 lg:gap-10 md:flex">
           {links.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm tracking-[0.22em] text-cream/80 uppercase transition-colors hover:text-gold"
+                className={
+                  link.href === '#app'
+                    ? 'border border-gold/50 px-4 py-2 text-xs tracking-[0.22em] text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10'
+                    : 'text-sm tracking-[0.22em] text-cream/80 uppercase transition-colors hover:text-gold'
+                }
               >
                 {link.label}
               </a>
             </li>
           ))}
-          <li>
-            <a
-              href="#app"
-              className="text-sm tracking-[0.22em] text-gold/80 uppercase transition-colors hover:text-gold"
-            >
-              Get the App
-            </a>
-          </li>
           <li>
             <a
               href="#booking"
@@ -81,21 +78,16 @@ export default function Navbar() {
               <a
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block py-2 text-sm tracking-[0.22em] text-cream/80 uppercase hover:text-gold"
+                className={
+                  link.href === '#app'
+                    ? 'mt-2 block border border-gold/50 px-4 py-3 text-center text-sm tracking-[0.22em] text-gold uppercase'
+                    : 'block py-2 text-sm tracking-[0.22em] text-cream/80 uppercase hover:text-gold'
+                }
               >
                 {link.label}
               </a>
             </li>
           ))}
-          <li>
-            <a
-              href="#app"
-              onClick={() => setOpen(false)}
-              className="block py-2 text-sm tracking-[0.22em] text-gold uppercase"
-            >
-              Get the App
-            </a>
-          </li>
         </ul>
       )}
     </header>

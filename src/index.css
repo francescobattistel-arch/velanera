@@ -18,6 +18,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Fixed navbar offset for in-page anchors (#app, #booking, …) */
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
   body {
     margin: 0;
     background-color: var(--color-ink);
