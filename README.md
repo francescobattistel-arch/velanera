@@ -3,7 +3,8 @@
 Official website for **Velanera**, a Mediterranean restaurant & lounge.
 Single-page site with sections: **Home · Lounge · Booking · Contacts**.
 
-Built with **Vite + React + TypeScript + Tailwind CSS v4**.
+Built with **Vite + React + TypeScript + Tailwind CSS v4**. Installable as a
+**Progressive Web App** (standalone / Home Screen).
 
 ## Development
 
@@ -11,9 +12,42 @@ Built with **Vite + React + TypeScript + Tailwind CSS v4**.
 npm install     # install dependencies
 npm run dev     # start dev server (http://localhost:5173)
 npm run build   # type-check + production build to dist/
-npm run preview # preview the production build
+npm run preview # preview the production build (required to test the service worker)
 npm run lint    # run ESLint
+npm run pwa:icons  # regenerate icons/splash from public/favicon.png
 ```
+
+## Install on iPhone (Add to Home Screen)
+
+1. Open **https://velanera.co** in **Safari** (not Chrome/in-app browsers).
+2. Tap the **Share** button.
+3. Tap **Add to Home Screen**.
+4. Confirm the name **Velanera** and tap **Add**.
+5. Launch from the Home Screen icon — the site opens fullscreen (standalone),
+   with a black status bar.
+
+Offline: the app shell and critical assets are cached by the service worker.
+The booking `mailto:` flow still opens Mail as usual.
+
+## Progressive Web App
+
+- Web app manifest + Workbox service worker via `vite-plugin-pwa`
+- Icons: `public/icons/` (192 / 512, any + maskable) and Apple touch icons
+- iOS splash screens: `public/splash/`
+- Theme / background: `#000000`
+
+### Web Push (optional scaffold)
+
+Push is **scaffolded** but inactive until you configure VAPID keys and a sender:
+
+1. `npx web-push generate-vapid-keys`
+2. Copy `.env.example` → `.env` and set `VITE_VAPID_PUBLIC_KEY=<public key>`
+3. Keep the **private** key on a server; use that server to call `web-push` and
+   store subscriptions from `subscribeToPush()` in `src/lib/push.ts`
+4. Service worker push handlers live in `public/push-sw.js`
+
+Without `VITE_VAPID_PUBLIC_KEY`, push helpers no-op. On iOS, Web Push only works
+for Home Screen–installed PWAs (iOS 16.4+), not in regular Safari tabs.
 
 ## Deployment (GitHub Pages → velanera.co)
 

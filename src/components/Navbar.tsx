@@ -45,6 +45,14 @@ export default function Navbar() {
           ))}
           <li>
             <a
+              href="#app"
+              className="text-sm tracking-[0.22em] text-gold/80 uppercase transition-colors hover:text-gold"
+            >
+              Get the App
+            </a>
+          </li>
+          <li>
+            <a
               href="#booking"
               className="border border-gold/60 px-5 py-2 text-xs tracking-[0.22em] text-gold uppercase transition-colors hover:bg-gold hover:text-ink"
             >
@@ -79,6 +87,15 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href="#app"
+              onClick={() => setOpen(false)}
+              className="block py-2 text-sm tracking-[0.22em] text-gold uppercase"
+            >
+              Get the App
+            </a>
+          </li>
         </ul>
       )}
     </header>

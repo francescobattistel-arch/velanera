@@ -9,11 +9,12 @@ export default function Footer() {
           Refined Mediterranean dining &amp; cocktails. Join us for an
           unforgettable evening.
         </p>
-        <div className="flex gap-6 text-xs tracking-[0.2em] text-cream/60 uppercase">
+        <div className="flex flex-wrap justify-center gap-6 text-xs tracking-[0.2em] text-cream/60 uppercase">
           <a href="#home" className="hover:text-gold">Home</a>
           <a href="#lounge" className="hover:text-gold">Lounge</a>
           <a href="#booking" className="hover:text-gold">Booking</a>
           <a href="#contacts" className="hover:text-gold">Contacts</a>
+          <a href="#app" className="text-gold/80 hover:text-gold">Get the App</a>
         </div>
         <p className="text-xs tracking-[0.2em] text-cream/30 uppercase">
           &copy; {new Date().getFullYear()} Velanera &middot; velanera.co
