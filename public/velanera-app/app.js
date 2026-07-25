@@ -109,17 +109,56 @@
     el.textContent = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
 
+  /** Prefer a warm, intimate female host voice (device-dependent). */
+  function pickHostVoice() {
+    const voices = window.speechSynthesis?.getVoices?.() || [];
+    if (!voices.length) return null;
+    const preferred = [
+      /samantha/i,
+      /ava/i,
+      /zoe/i,
+      /karen/i,
+      /moira/i,
+      /victoria/i,
+      /google uk english female/i,
+      /google us english female/i,
+      /microsoft zira/i,
+      /female/i,
+    ];
+    for (const re of preferred) {
+      const hit = voices.find((v) => re.test(v.name));
+      if (hit) return hit;
+    }
+    return (
+      voices.find((v) => /en(-|_)?(GB|US)/i.test(v.lang) && !/male/i.test(v.name)) ||
+      voices.find((v) => /^en/i.test(v.lang)) ||
+      null
+    );
+  }
+
   function speak(text) {
     if (!window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = 0.95;
-      u.pitch = 0.95;
+      const voice = pickHostVoice();
+      if (voice) u.voice = voice;
+      u.lang = voice?.lang || "en-GB";
+      // Slower, slightly lower — soft late-evening host presence
+      u.rate = 0.86;
+      u.pitch = 0.88;
+      u.volume = 1;
       window.speechSynthesis.speak(u);
     } catch {
       /* optional */
     }
+  }
+
+  // Chrome/Safari populate voices asynchronously
+  if (window.speechSynthesis) {
+    window.speechSynthesis.addEventListener?.("voiceschanged", () => {
+      pickHostVoice();
+    });
   }
 
   /* ——— Onboarding ——— */
