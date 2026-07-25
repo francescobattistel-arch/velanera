@@ -13,8 +13,11 @@ struct ConciergeArchiveView: View {
                     .foregroundStyle(VelaneraColors.ivory)
 
                 if entries.isEmpty {
-                    Text("Your voice history will appear here.")
-                        .foregroundStyle(VelaneraColors.secondaryText)
+                    EmptyStateView(
+                        title: "No transcripts yet",
+                        message: "Your voice history with the concierge will appear here.",
+                        systemImage: "waveform"
+                    )
                 } else {
                     TranscriptHistoryView(messages: entries.map(\.asMessage).reversed())
                 }

@@ -59,10 +59,10 @@ struct SettingsView: View {
                     }
 
                     section("Privacy & legal") {
-                        Link(destination: URL(string: "https://velanera.co")!) {
+                        NavigationLink(value: AppDestination.privacy) {
                             settingsRow("Privacy policy", systemImage: "hand.raised")
                         }
-                        Link(destination: URL(string: "https://velanera.co")!) {
+                        NavigationLink(value: AppDestination.terms) {
                             settingsRow("Terms of use", systemImage: "doc.text")
                         }
                     }

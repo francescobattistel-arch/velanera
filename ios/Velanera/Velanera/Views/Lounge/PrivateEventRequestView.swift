@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Private event briefing before handing into the booking engine.
 struct PrivateEventRequestView: View {
+    @Environment(AppEnvironment.self) private var environment
     @Binding var selectedTab: AppTab
 
     var body: some View {
@@ -30,6 +31,11 @@ struct PrivateEventRequestView: View {
                     .foregroundStyle(VelaneraColors.secondaryText)
 
                 LuxuryButton(title: "Start Private Request", systemImage: "calendar") {
+                    environment.bookingDraft.prefill(
+                        venue: .privateEvent,
+                        occasion: "Private event",
+                        note: "Private area request via lounge"
+                    )
                     selectedTab = .book
                 }
             }

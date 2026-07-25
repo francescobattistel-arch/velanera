@@ -40,6 +40,17 @@ struct BookView: View {
                     analytics: environment.analyticsService
                 )
             }
+            if let draft = environment.bookingDraft.consume() {
+                viewModel?.venue = draft.venue
+                viewModel?.offeringID = draft.offeringID
+                viewModel?.occasion = draft.occasion
+                if let guests = draft.guestCount {
+                    viewModel?.guestCount = guests
+                }
+                if !draft.note.isEmpty {
+                    viewModel?.specialRequests = draft.note
+                }
+            }
         }
         .task(id: "\(viewModel?.venue.rawValue ?? "")-\(viewModel?.date.timeIntervalSince1970 ?? 0)-\(viewModel?.guestCount ?? 0)") {
             await viewModel?.loadAvailability()

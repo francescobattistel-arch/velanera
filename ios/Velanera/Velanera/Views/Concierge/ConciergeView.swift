@@ -32,9 +32,7 @@ struct ConciergeView: View {
             }
             .toolbar(.hidden, for: .navigationBar)
             .velaneraRouter(selectedTab: .constant(.home))
-            .statusBarHidden(false)
         }
-        .persistentSystemOverlays(.automatic)
         .onAppear {
             if viewModel == nil {
                 viewModel = ConciergeViewModel(
