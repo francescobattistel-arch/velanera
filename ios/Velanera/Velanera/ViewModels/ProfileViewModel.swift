@@ -3,7 +3,7 @@ import Observation
 import AuthenticationServices
 import SwiftData
 
-/// Profile, authentication, favourites, and settings.
+/// Profile, authentication, favourites, and account editing.
 @Observable
 @MainActor
 final class ProfileViewModel {
@@ -14,8 +14,12 @@ final class ProfileViewModel {
 
     var profile: UserProfile?
     var isLoading = false
+    var isSaving = false
     var errorMessage: String?
     var notificationsEnabled = true
+    var editName = ""
+    var editEmail = ""
+    var editPhone = ""
 
     init(
         apiClient: APIClientProtocol,
@@ -43,6 +47,9 @@ final class ProfileViewModel {
             }
         }
         notificationsEnabled = profile?.notificationsEnabled ?? true
+        editName = profile?.displayName ?? ""
+        editEmail = profile?.email ?? ""
+        editPhone = profile?.phone ?? ""
         isLoading = false
     }
 
@@ -53,6 +60,7 @@ final class ProfileViewModel {
             profile = user
             modelContext.insert(PersistedUserProfile(from: user))
             analytics.track(event: .signIn(.apple))
+            await load()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -64,20 +72,47 @@ final class ProfileViewModel {
             profile = user
             modelContext.insert(PersistedUserProfile(from: user))
             analytics.track(event: .signIn(.google))
+            await load()
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
+    func saveProfile() async {
+        isSaving = true
+        errorMessage = nil
+        do {
+            let updated = try await apiClient.updateProfile(
+                ProfileUpdateDTO(
+                    displayName: editName,
+                    email: editEmail,
+                    phone: editPhone,
+                    notificationsEnabled: notificationsEnabled
+                )
+            )
+            profile = updated
+            HapticFeedback.success()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isSaving = false
+    }
+
     func signOut() {
         authService.signOut()
         profile = UserProfile(displayName: "Guest", email: "guest@velanera.co")
+        editName = profile?.displayName ?? ""
+        editEmail = profile?.email ?? ""
+        editPhone = ""
     }
 
     func updateNotifications(_ enabled: Bool) async {
         notificationsEnabled = enabled
         if enabled {
             _ = await notifications.requestAuthorization()
+            _ = try? await apiClient.registerPushToken(
+                PushTokenDTO(token: "mock-device-token", platform: "ios")
+            )
         }
         profile?.notificationsEnabled = enabled
     }

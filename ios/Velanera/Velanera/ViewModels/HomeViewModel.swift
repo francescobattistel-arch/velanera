@@ -11,7 +11,7 @@ final class HomeViewModel {
     var featuredDishes: [MenuItem] = []
     var chefSpecials: [MenuItem] = []
     var events: [VenueEvent] = []
-    var gallerySymbols: [String] = []
+    var gallery: [GalleryAsset] = []
     var hours: OpeningHours?
     var isLoading = false
     var errorMessage: String?
@@ -31,7 +31,7 @@ final class HomeViewModel {
             featuredDishes = feed.featuredDishes
             chefSpecials = feed.chefSpecials
             events = feed.events
-            gallerySymbols = feed.gallerySymbols
+            gallery = feed.gallery
             hours = feed.hours
         } catch {
             errorMessage = error.localizedDescription

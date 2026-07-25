@@ -27,9 +27,13 @@ struct LoungeOffering: Identifiable, Codable, Hashable, Sendable {
     let id: UUID
     var name: String
     var summary: String
+    var detail: String
     var kind: Kind
     var startingPrice: Decimal
     var capacity: Int
+    var includes: [String]
+    var minimumSpend: Decimal?
+    var symbolName: String
 
     var formattedStartingPrice: String {
         "From " + startingPrice.formatted(.currency(code: "GBP"))
@@ -39,15 +43,23 @@ struct LoungeOffering: Identifiable, Codable, Hashable, Sendable {
         id: UUID = UUID(),
         name: String,
         summary: String,
+        detail: String = "",
         kind: Kind,
         startingPrice: Decimal,
-        capacity: Int
+        capacity: Int,
+        includes: [String] = [],
+        minimumSpend: Decimal? = nil,
+        symbolName: String? = nil
     ) {
         self.id = id
         self.name = name
         self.summary = summary
+        self.detail = detail.isEmpty ? summary : detail
         self.kind = kind
         self.startingPrice = startingPrice
         self.capacity = capacity
+        self.includes = includes
+        self.minimumSpend = minimumSpend
+        self.symbolName = symbolName ?? kind.symbolName
     }
 }

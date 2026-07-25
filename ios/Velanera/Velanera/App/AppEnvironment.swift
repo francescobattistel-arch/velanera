@@ -13,6 +13,8 @@ final class AppEnvironment {
     let notificationService: NotificationServiceProtocol
     let analyticsService: AnalyticsServiceProtocol
     let permissionService: PermissionServiceProtocol
+    let paymentService: PaymentServiceProtocol
+    let settingsStore: SettingsStore
 
     init(
         apiClient: APIClientProtocol,
@@ -22,7 +24,9 @@ final class AppEnvironment {
         conversationEngine: ConversationEngineProtocol,
         notificationService: NotificationServiceProtocol,
         analyticsService: AnalyticsServiceProtocol,
-        permissionService: PermissionServiceProtocol
+        permissionService: PermissionServiceProtocol,
+        paymentService: PaymentServiceProtocol,
+        settingsStore: SettingsStore
     ) {
         self.apiClient = apiClient
         self.authService = authService
@@ -32,6 +36,8 @@ final class AppEnvironment {
         self.notificationService = notificationService
         self.analyticsService = analyticsService
         self.permissionService = permissionService
+        self.paymentService = paymentService
+        self.settingsStore = settingsStore
     }
 
     /// Production composition root with mock networking until a backend ships.
@@ -47,7 +53,9 @@ final class AppEnvironment {
             conversationEngine: conversationEngine,
             notificationService: NotificationService(),
             analyticsService: AnalyticsService(),
-            permissionService: PermissionService()
+            permissionService: PermissionService(),
+            paymentService: PaymentService(),
+            settingsStore: SettingsStore()
         )
     }
 }

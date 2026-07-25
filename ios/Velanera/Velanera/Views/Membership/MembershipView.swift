@@ -3,6 +3,7 @@ import SwiftUI
 /// Digital membership wallet, loyalty, benefits, and exclusive events.
 struct MembershipView: View {
     @Environment(AppEnvironment.self) private var environment
+    @State private var selectedTab: AppTab = .membership
     @State private var viewModel: MembershipViewModel?
 
     var body: some View {
@@ -11,16 +12,25 @@ struct MembershipView: View {
                 Text("Membership")
                     .font(VelaneraTypography.title(34))
                     .foregroundStyle(VelaneraColors.ivory)
-
                 Text("A quieter key to Velanera — priority, loyalty, and evenings reserved for members.")
                     .font(VelaneraTypography.body(15))
                     .foregroundStyle(VelaneraColors.secondaryText)
+
+                HStack(spacing: 8) {
+                    NavigationLink(value: AppDestination.tierComparison) {
+                        chip("Compare tiers")
+                    }
+                    NavigationLink(value: AppDestination.membershipUpgrade) {
+                        chip("Upgrade")
+                    }
+                }
 
                 if viewModel?.isLoading == true && viewModel?.membership == nil {
                     LoadingSkeleton(height: 200)
                 } else if let membership = viewModel?.membership {
                     MembershipCard(membership: membership)
                         .luxuryAppear()
+                        .goldShimmer(isActive: membership.tier == .black || membership.tier == .founder)
 
                     section(title: "VIP Status", subtitle: membership.tier.displayName) {
                         GlassCard {
@@ -55,22 +65,30 @@ struct MembershipView: View {
                                 .foregroundStyle(VelaneraColors.secondaryText)
                         } else {
                             ForEach(viewModel?.exclusiveEvents ?? []) { event in
-                                EventCard(event: event)
+                                NavigationLink(value: AppDestination.eventDetail(event.id)) {
+                                    EventCard(event: event)
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
                     }
 
-                    if let session = viewModel?.checkoutSession {
-                        GlassCard {
-                            Text("Checkout ready: \(session.tier.displayName) · \(session.amount.formatted(.currency(code: session.currencyCode)))")
-                                .font(VelaneraTypography.caption())
-                                .foregroundStyle(VelaneraColors.gold)
-                        }
+                    NavigationLink(value: AppDestination.membershipUpgrade) {
+                        Text("Explore Black Tier")
+                            .font(VelaneraTypography.label(14))
+                            .tracking(1.2)
+                            .textCase(.uppercase)
+                            .foregroundStyle(VelaneraColors.champagne)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, VelaneraSpacing.md)
+                            .background(VelaneraColors.elevated)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: VelaneraSpacing.radiusSm, style: .continuous)
+                                    .strokeBorder(VelaneraColors.goldStroke, lineWidth: 1)
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: VelaneraSpacing.radiusSm, style: .continuous))
                     }
-
-                    LuxuryButton(title: "Explore Black Tier", style: .secondary, systemImage: "crown") {
-                        Task { await viewModel?.prepareUpgrade(to: .black) }
-                    }
+                    .buttonStyle(.plain)
                 } else if let error = viewModel?.errorMessage {
                     Text(error).foregroundStyle(VelaneraColors.danger)
                 }
@@ -81,11 +99,13 @@ struct MembershipView: View {
         .background(VelaneraColors.ambientGradient.ignoresSafeArea())
         .navigationTitle("Membership")
         .navigationBarTitleDisplayMode(.inline)
+        .velaneraRouter(selectedTab: $selectedTab)
         .task {
             if viewModel == nil {
                 viewModel = MembershipViewModel(
                     apiClient: environment.apiClient,
-                    analytics: environment.analyticsService
+                    analytics: environment.analyticsService,
+                    payments: environment.paymentService
                 )
             }
             await viewModel?.load()
@@ -101,5 +121,15 @@ struct MembershipView: View {
             SectionHeader(title: title, subtitle: subtitle)
             content()
         }
+    }
+
+    private func chip(_ title: String) -> some View {
+        Text(title)
+            .font(VelaneraTypography.label(11))
+            .foregroundStyle(VelaneraColors.champagne)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(VelaneraColors.elevated)
+            .clipShape(Capsule())
     }
 }

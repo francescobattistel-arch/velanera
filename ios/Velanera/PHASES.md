@@ -1,25 +1,20 @@
-# Velanera iOS — Implementation Phases
+# Velanera iOS — Feature Status
 
-## Phase 1 — Foundation ✅
+## Complete (app-first)
 
-Design system, navigation shell, reusable components, theme, assets, Xcode project.
+1. **AI Voice Concierge** — press-and-hold STT, mock conversation engine, TTS, suggestions, staff requests, transcript archive  
+2. **Restaurant** — full menu, wine/cocktail/dessert lists, chef page, allergen guide, dish detail, favourites  
+3. **Lounge** — VIP/private/bottle detail, DJ detail, private event briefing, gallery  
+4. **Booking engine** — availability slots, occasion/phone, confirmation codes, manage/cancel  
+5. **Membership** — digital card/QR, tier compare, mocked checkout + receipt  
+6. **Events** — list, filters, detail, RSVP  
+7. **Profile** — Apple Sign In, Google placeholder, reservations, favourites, edit profile  
+8. **Settings** — notifications, voice, reduce motion, dietary exclusions, legal, version  
+9. **Premium animations** — luxuryAppear, gold shimmer, hero chrome, matched FAB, waveform  
+10. **Backend interfaces** — expanded `APIClient` + mocks for availability, RSVP, payments, profile PATCH, push token, concierge requests  
 
-## Phase 2 — Voice Concierge ✅
+## Deferred
 
-Speech recognition, voice playback, conversation engine, mock AI, press-and-hold UX, transcript history.
-
-## Phase 3 — Guest Features ✅
-
-Home, Restaurant menu, Lounge, Booking, Membership card/QR, Profile with Apple Sign In + Google placeholder.
-
-## Phase 4 — Platform Scaffolding ✅
-
-Configurable APIClient, mock backend, auth/notifications/payments/analytics services, OpenAI integration notes (server-side keys only).
-
-## Next (post-scaffold)
-
-1. Open on macOS Xcode, set Development Team, run on simulator.
-2. Replace placeholder venue content (address, phone, photography assets).
-3. Point `VELANERA_USE_MOCK_API` to `false` when backend is ready.
-4. Wire real Google Sign-In SDK if required.
-5. Add App Store screenshots / privacy nutrition labels.
+- TestFlight / Fastlane / CI upload (intentionally paused)
+- Live OpenAI keys (server-side only)
+- Real StoreKit / Google Sign-In SDK

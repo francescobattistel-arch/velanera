@@ -11,9 +11,21 @@ struct LoungeView: View {
             VStack(alignment: .leading, spacing: VelaneraSpacing.xl) {
                 hero
 
+                HStack(spacing: 8) {
+                    NavigationLink(value: AppDestination.bottleService) {
+                        chip("Bottle Service")
+                    }
+                    NavigationLink(value: AppDestination.privateEventRequest) {
+                        chip("Private Events")
+                    }
+                    NavigationLink(value: AppDestination.gallery) {
+                        chip("Gallery")
+                    }
+                }
+                .pagePadding()
+
                 if viewModel?.isLoading == true && viewModel?.offerings.isEmpty == true {
-                    LoadingSkeletonList()
-                        .pagePadding()
+                    LoadingSkeletonList().pagePadding()
                 } else {
                     ForEach(LoungeOffering.Kind.allCases, id: \.self) { kind in
                         offeringSection(kind: kind, items: viewModel?.offerings(for: kind) ?? [])
@@ -21,7 +33,10 @@ struct LoungeView: View {
 
                     section(title: "Upcoming DJs", subtitle: "Late energy, curated") {
                         ForEach(viewModel?.upcomingDJs ?? []) { event in
-                            EventCard(event: event)
+                            NavigationLink(value: AppDestination.djDetail(event.id)) {
+                                EventCard(event: event)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -31,8 +46,10 @@ struct LoungeView: View {
                                 Text("Bespoke evenings for twelve to sixty guests.")
                                     .font(VelaneraTypography.body(15))
                                     .foregroundStyle(VelaneraColors.secondaryText)
-                                LuxuryButton(title: "Request Private Event", systemImage: "envelope") {
-                                    selectedTab = .book
+                                NavigationLink(value: AppDestination.privateEventRequest) {
+                                    Text("Plan a private evening")
+                                        .font(VelaneraTypography.label(12))
+                                        .foregroundStyle(VelaneraColors.gold)
                                 }
                             }
                         }
@@ -40,15 +57,18 @@ struct LoungeView: View {
 
                     section(title: "Gallery", subtitle: "After dark") {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                            ForEach(["sparkles", "music.note", "wineglass.fill", "sofa.fill"], id: \.self) { symbol in
-                                RoundedRectangle(cornerRadius: VelaneraSpacing.radiusMd, style: .continuous)
-                                    .fill(VelaneraColors.elevated)
-                                    .frame(height: 140)
-                                    .overlay {
-                                        Image(systemName: symbol)
-                                            .font(.title)
-                                            .foregroundStyle(VelaneraColors.gold.opacity(0.7))
-                                    }
+                            ForEach(viewModel?.gallery.prefix(4) ?? []) { asset in
+                                NavigationLink(value: AppDestination.galleryItem(asset.id)) {
+                                    RoundedRectangle(cornerRadius: VelaneraSpacing.radiusMd, style: .continuous)
+                                        .fill(VelaneraColors.elevated)
+                                        .frame(height: 140)
+                                        .overlay {
+                                            Image(systemName: asset.symbolName)
+                                                .font(.title)
+                                                .foregroundStyle(VelaneraColors.gold.opacity(0.7))
+                                        }
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -58,6 +78,7 @@ struct LoungeView: View {
         }
         .background(VelaneraColors.ambientGradient.ignoresSafeArea())
         .navigationTitle("Lounge")
+        .velaneraRouter(selectedTab: $selectedTab)
         .task {
             if viewModel == nil {
                 viewModel = LoungeViewModel(apiClient: environment.apiClient)
@@ -70,8 +91,7 @@ struct LoungeView: View {
         ZStack(alignment: .bottomLeading) {
             LinearGradient(
                 colors: [Color(hex: 0x241C14), VelaneraColors.matteBlack],
-                startPoint: .top,
-                endPoint: .bottom
+                startPoint: .top, endPoint: .bottom
             )
             .frame(height: 280)
             .overlay {
@@ -97,29 +117,32 @@ struct LoungeView: View {
     private func offeringSection(kind: LoungeOffering.Kind, items: [LoungeOffering]) -> some View {
         section(title: kind.displayName, subtitle: "From the lounge book") {
             ForEach(items) { offering in
-                GlassCard {
-                    HStack(alignment: .top, spacing: VelaneraSpacing.md) {
-                        Image(systemName: kind.symbolName)
-                            .foregroundStyle(VelaneraColors.gold)
-                            .frame(width: 36, height: 36)
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(offering.name)
-                                .font(VelaneraTypography.headline(17))
-                                .foregroundStyle(VelaneraColors.ivory)
-                            Text(offering.summary)
-                                .font(VelaneraTypography.caption())
-                                .foregroundStyle(VelaneraColors.secondaryText)
-                            HStack {
-                                Text(offering.formattedStartingPrice)
-                                    .foregroundStyle(VelaneraColors.gold)
-                                Spacer()
-                                Text("Up to \(offering.capacity)")
-                                    .foregroundStyle(VelaneraColors.tertiaryText)
+                NavigationLink(value: AppDestination.loungeOffering(offering.id)) {
+                    GlassCard {
+                        HStack(alignment: .top, spacing: VelaneraSpacing.md) {
+                            Image(systemName: kind.symbolName)
+                                .foregroundStyle(VelaneraColors.gold)
+                                .frame(width: 36, height: 36)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(offering.name)
+                                    .font(VelaneraTypography.headline(17))
+                                    .foregroundStyle(VelaneraColors.ivory)
+                                Text(offering.summary)
+                                    .font(VelaneraTypography.caption())
+                                    .foregroundStyle(VelaneraColors.secondaryText)
+                                HStack {
+                                    Text(offering.formattedStartingPrice)
+                                        .foregroundStyle(VelaneraColors.gold)
+                                    Spacer()
+                                    Text("Up to \(offering.capacity)")
+                                        .foregroundStyle(VelaneraColors.tertiaryText)
+                                }
+                                .font(VelaneraTypography.label(11))
                             }
-                            .font(VelaneraTypography.label(11))
                         }
                     }
                 }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -134,5 +157,15 @@ struct LoungeView: View {
             content()
         }
         .pagePadding()
+    }
+
+    private func chip(_ title: String) -> some View {
+        Text(title)
+            .font(VelaneraTypography.label(11))
+            .foregroundStyle(VelaneraColors.champagne)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(VelaneraColors.elevated)
+            .clipShape(Capsule())
     }
 }

@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31D08E6086EE2EEC2BEDF54E /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B5DCE92EAED4BA09D0BAD0 /* AppDestination.swift */; };
 		5350350DAE0B429AD4688CDE /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18798706EE4CFBFE40C35C32 /* AppEnvironment.swift */; };
 		9816C631EE22B59957CE20AA /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECBB19CEB18CB2117EE045E3 /* RootTabView.swift */; };
+		8D47B5E55F9BCA66B87DC6AF /* VelaneraRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E9B6150F60FC8F776B6758 /* VelaneraRouter.swift */; };
 		32E5130B66C62A390416D89A /* EventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B54DD54481F9B72EBEF41AE /* EventCard.swift */; };
 		A68C5B642CAC2C4334DB635F /* FloatingConciergeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C47CEFBF9E7FF1F73C4C89 /* FloatingConciergeButton.swift */; };
 		F6DB8AEEE180494957FB8AF1 /* GlassCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E2A012F4CFE502DD40F8E /* GlassCard.swift */; };
@@ -28,7 +30,12 @@
 		A56290328E6EA110396B1284 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1C27872194921F5119B844 /* Date+Extensions.swift */; };
 		1CF932C0CE122CE2F9634F00 /* View+Luxury.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA808B356A7DC45FACF9F66 /* View+Luxury.swift */; };
 		D535C432C3314749C6A71CAA /* Allergen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C70AA025AA2E65C7F917D /* Allergen.swift */; };
+		95153758FAE46C7C9BF361E7 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C44D270403CA3706D6A9BC9 /* AppSettings.swift */; };
+		3F66FFE017664B8AD2096217 /* AvailabilitySlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C185F2D42C0D25DBA0B086 /* AvailabilitySlot.swift */; };
+		D59121D4384C52525D8DF987 /* ChefProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EBCF23FCCE220DD138C322 /* ChefProfile.swift */; };
 		EC4BD88FEBD14D1F6395C680 /* ConciergeMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14828195D3ECA11CFAE71DFD /* ConciergeMessage.swift */; };
+		1D3641A3820A20FB867CD83F /* EventRSVP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7068A58CCD19BB094C7BC6EB /* EventRSVP.swift */; };
+		1824ED51EF56E85D4CF455AB /* GalleryAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EF3C61DB239201E416E498 /* GalleryAsset.swift */; };
 		2E609BC409FE53F0B0A2514C /* LoungeOffering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAF13A13178BFB9FBE69E70 /* LoungeOffering.swift */; };
 		C8A3DD0EE347684648357243 /* Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A932C5E62F83A70819F7059 /* Membership.swift */; };
 		E249A59F5EAAE638C6C78876 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2633A427BA7D5C0F4E3A3F75 /* MenuItem.swift */; };
@@ -50,6 +57,7 @@
 		1A5EB1DD41C2EAFEACE45468 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67D600694499A7344E96424 /* NotificationService.swift */; };
 		3598EAC6A23FE08BADF5A152 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8908C2FD03A1312076BBFC8D /* PaymentService.swift */; };
 		0701545AD57A3225A4C14D9C /* PermissionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9201ED259711BED988011F /* PermissionService.swift */; };
+		E350F5494B4BDCC70E39FD0B /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEC046A26DDF839B25A45AF /* SettingsStore.swift */; };
 		24CD9406FAF172A16C6574F3 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EA84EFCCC9C8CD01F5B04 /* SpeechRecognizer.swift */; };
 		4467A2BD5387E569C6D08066 /* VoicePlaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A23A487CE7F64A873C68E5 /* VoicePlaybackService.swift */; };
 		284C85351209E1126D174026 /* GlassModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034AF65AC44AA299EF6BB87 /* GlassModifier.swift */; };
@@ -62,25 +70,50 @@
 		2514620C01814DABD9FA5001 /* VelaneraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C4D722F9380A8EDCBA8392 /* VelaneraApp.swift */; };
 		80AAB884B586FDB8F7ECE9B5 /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B569B0BABB3D93D92FE7A9 /* BookViewModel.swift */; };
 		A63359CC8D09FFC438AC7971 /* ConciergeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C410051BDE285A60DAC1A7B1 /* ConciergeViewModel.swift */; };
+		FED017EBEB536EB1FFC0451E /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD24C2EC027840E760E895 /* EventsViewModel.swift */; };
 		778F9654DAA64060105916D0 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA481780F58B1930BE4A760 /* HomeViewModel.swift */; };
 		3B13C7EC38522248EA27C711 /* LoungeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8EE5A7322C8A9AC24E0ED2 /* LoungeViewModel.swift */; };
 		B3A52A4DBCEB8CD3B9B80AD9 /* MembershipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57C2F32DE971DA952404627 /* MembershipViewModel.swift */; };
 		224A076674951BD2F575CC40 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA8E703C78CBD9C5DC1EA6B /* ProfileViewModel.swift */; };
 		FD742EDD5C71149375E1311D /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934A6E4EF50576F26B74889A /* RestaurantViewModel.swift */; };
+		C63DCF4C53D347197280F1FD /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBF3E4E74AEE46CAB4DF5BD /* SettingsViewModel.swift */; };
 		A5A2991C30648660C871C4F0 /* BookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7873371D82BF77540B467BF1 /* BookView.swift */; };
+		DD8AEB91965865D315655E58 /* ReservationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D41063C868D0C768F9CE83A /* ReservationDetailView.swift */; };
+		D4E3B7C8A3C3553725015C45 /* ConciergeArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E449065EC80920673577320 /* ConciergeArchiveView.swift */; };
 		5ECA477364770C0291526BEF /* ConciergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C5D5B3FF49B34B8CF5135 /* ConciergeView.swift */; };
+		2EF15322B5B6046FBDAC1F46 /* StaffRequestStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB0EA973B020CFF594EDEEC /* StaffRequestStatusView.swift */; };
 		52939FF2587D95F09C562243 /* TranscriptHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50D40F87763E997F32FAFC3 /* TranscriptHistoryView.swift */; };
+		1A7314AD89CF379B7F22B4D1 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA05E2DB93E4324FD8FDCD0B /* EventDetailView.swift */; };
+		B8D81F9BDB36E7AB8AF4B2D8 /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BABDCF7C417F043D0358D91 /* EventsView.swift */; };
+		17A7F8AC79D4D29F753DD33B /* GalleryLightboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449C779D91CDED1AAEA42515 /* GalleryLightboxView.swift */; };
+		E5B3CA5EB3BC79717243F04E /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEAE9CA8F402219901DBEA6 /* GalleryView.swift */; };
 		2422ABA0CABC034E02107009 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221A8D24931CB52E367F97D4 /* HomeView.swift */; };
+		ADF39E33F738070BA80556B8 /* BottleServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D0CCDF244D94921800B5FD /* BottleServiceView.swift */; };
+		1C8101EF0DBD0172259C1298 /* DJDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323C44774AF0C954F618D7A /* DJDetailView.swift */; };
+		9F6BAB468549E9E4B6A1F082 /* LoungeOfferingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06264B3CBB18DF34898357C0 /* LoungeOfferingDetailView.swift */; };
 		E678CDDE4289F947FCC961F4 /* LoungeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4C6589C4508CCA8D83626E /* LoungeView.swift */; };
+		04B847EFB0CA4F5B26DDAE2B /* PrivateEventRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16194018B02811DC6F9D6FF6 /* PrivateEventRequestView.swift */; };
+		A00776C35411C9BB9BD83535 /* MembershipUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC045B99FA8CDB426D48831C /* MembershipUpgradeView.swift */; };
 		0A260086695FBEEB604E8743 /* MembershipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF535F424FA370A47D9BE5 /* MembershipView.swift */; };
+		AA12F7BCDF2159010AE73260 /* TierComparisonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD478F6DA45DBDF32F608D3 /* TierComparisonView.swift */; };
+		90058422AC66BC4A39A103D7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD8E7919D76E4033E79C021 /* EditProfileView.swift */; };
 		0D28183264E1E279D009AC0D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E62B40E17545538CB384B54 /* ProfileView.swift */; };
+		3262699D757E8C3C492A9EDF /* AllergenGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244E8AF4AFDD6CA9148B3301 /* AllergenGuideView.swift */; };
+		34CE70EF6BF2EA34CF001AA4 /* ChefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDBA697394CCB21CF5EB18F /* ChefView.swift */; };
+		F029B31CE84FEF2D9A0D8194 /* CocktailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF2D9D812E2A825451CC9F /* CocktailListView.swift */; };
+		C245B63785B5E1CBC876729A /* DessertListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D7AB75129501FCEE2E610 /* DessertListView.swift */; };
+		90F6BAEF2995D8AB3427E184 /* MenuItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B7380E24698B27F39906D0 /* MenuItemDetailView.swift */; };
 		D524B21DED2207D5BAE70FF9 /* RestaurantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF0BCE3B55F46A5D0573D1E /* RestaurantView.swift */; };
+		9FA56AEAF69A76478E81763D /* WineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6338DFFD5185FC3BBE9B3E83 /* WineListView.swift */; };
+		E0FB988D62B0A1214BBB31A3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8E8D052E42E393A55A2100 /* SettingsView.swift */; };
 		5AAA783FB5C3EAEB4720BF20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB03D1306D8A275E2D486B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		98B5DCE92EAED4BA09D0BAD0 /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
 		18798706EE4CFBFE40C35C32 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		ECBB19CEB18CB2117EE045E3 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		F3E9B6150F60FC8F776B6758 /* VelaneraRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelaneraRouter.swift; sourceTree = "<group>"; };
 		4CFB03D1306D8A275E2D486B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B54DD54481F9B72EBEF41AE /* EventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCard.swift; sourceTree = "<group>"; };
 		F1C47CEFBF9E7FF1F73C4C89 /* FloatingConciergeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingConciergeButton.swift; sourceTree = "<group>"; };
@@ -102,7 +135,12 @@
 		6AA808B356A7DC45FACF9F66 /* View+Luxury.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View+Luxury.swift; sourceTree = "<group>"; };
 		12F1C9823B7D241C34392D7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		374C70AA025AA2E65C7F917D /* Allergen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allergen.swift; sourceTree = "<group>"; };
+		9C44D270403CA3706D6A9BC9 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		56C185F2D42C0D25DBA0B086 /* AvailabilitySlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailabilitySlot.swift; sourceTree = "<group>"; };
+		75EBCF23FCCE220DD138C322 /* ChefProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChefProfile.swift; sourceTree = "<group>"; };
 		14828195D3ECA11CFAE71DFD /* ConciergeMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConciergeMessage.swift; sourceTree = "<group>"; };
+		7068A58CCD19BB094C7BC6EB /* EventRSVP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRSVP.swift; sourceTree = "<group>"; };
+		F3EF3C61DB239201E416E498 /* GalleryAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryAsset.swift; sourceTree = "<group>"; };
 		2AAF13A13178BFB9FBE69E70 /* LoungeOffering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoungeOffering.swift; sourceTree = "<group>"; };
 		1A932C5E62F83A70819F7059 /* Membership.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Membership.swift; sourceTree = "<group>"; };
 		2633A427BA7D5C0F4E3A3F75 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
@@ -124,6 +162,7 @@
 		B67D600694499A7344E96424 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		8908C2FD03A1312076BBFC8D /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		9D9201ED259711BED988011F /* PermissionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionService.swift; sourceTree = "<group>"; };
+		FDEC046A26DDF839B25A45AF /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		BF0EA84EFCCC9C8CD01F5B04 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		C5A23A487CE7F64A873C68E5 /* VoicePlaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePlaybackService.swift; sourceTree = "<group>"; };
 		D034AF65AC44AA299EF6BB87 /* GlassModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassModifier.swift; sourceTree = "<group>"; };
@@ -137,19 +176,42 @@
 		31C4D722F9380A8EDCBA8392 /* VelaneraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelaneraApp.swift; sourceTree = "<group>"; };
 		C1B569B0BABB3D93D92FE7A9 /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
 		C410051BDE285A60DAC1A7B1 /* ConciergeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConciergeViewModel.swift; sourceTree = "<group>"; };
+		8FAD24C2EC027840E760E895 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
 		2EA481780F58B1930BE4A760 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		6E8EE5A7322C8A9AC24E0ED2 /* LoungeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoungeViewModel.swift; sourceTree = "<group>"; };
 		A57C2F32DE971DA952404627 /* MembershipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipViewModel.swift; sourceTree = "<group>"; };
 		CEA8E703C78CBD9C5DC1EA6B /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		934A6E4EF50576F26B74889A /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
+		CDBF3E4E74AEE46CAB4DF5BD /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		7873371D82BF77540B467BF1 /* BookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookView.swift; sourceTree = "<group>"; };
+		3D41063C868D0C768F9CE83A /* ReservationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationDetailView.swift; sourceTree = "<group>"; };
+		9E449065EC80920673577320 /* ConciergeArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConciergeArchiveView.swift; sourceTree = "<group>"; };
 		914C5D5B3FF49B34B8CF5135 /* ConciergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConciergeView.swift; sourceTree = "<group>"; };
+		CBB0EA973B020CFF594EDEEC /* StaffRequestStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffRequestStatusView.swift; sourceTree = "<group>"; };
 		C50D40F87763E997F32FAFC3 /* TranscriptHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptHistoryView.swift; sourceTree = "<group>"; };
+		BA05E2DB93E4324FD8FDCD0B /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		9BABDCF7C417F043D0358D91 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
+		449C779D91CDED1AAEA42515 /* GalleryLightboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryLightboxView.swift; sourceTree = "<group>"; };
+		7BEAE9CA8F402219901DBEA6 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
 		221A8D24931CB52E367F97D4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D7D0CCDF244D94921800B5FD /* BottleServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottleServiceView.swift; sourceTree = "<group>"; };
+		6323C44774AF0C954F618D7A /* DJDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJDetailView.swift; sourceTree = "<group>"; };
+		06264B3CBB18DF34898357C0 /* LoungeOfferingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoungeOfferingDetailView.swift; sourceTree = "<group>"; };
 		AC4C6589C4508CCA8D83626E /* LoungeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoungeView.swift; sourceTree = "<group>"; };
+		16194018B02811DC6F9D6FF6 /* PrivateEventRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateEventRequestView.swift; sourceTree = "<group>"; };
+		FC045B99FA8CDB426D48831C /* MembershipUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipUpgradeView.swift; sourceTree = "<group>"; };
 		9ECF535F424FA370A47D9BE5 /* MembershipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipView.swift; sourceTree = "<group>"; };
+		9FD478F6DA45DBDF32F608D3 /* TierComparisonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TierComparisonView.swift; sourceTree = "<group>"; };
+		3DD8E7919D76E4033E79C021 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		4E62B40E17545538CB384B54 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		244E8AF4AFDD6CA9148B3301 /* AllergenGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllergenGuideView.swift; sourceTree = "<group>"; };
+		DCDBA697394CCB21CF5EB18F /* ChefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChefView.swift; sourceTree = "<group>"; };
+		04CF2D9D812E2A825451CC9F /* CocktailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailListView.swift; sourceTree = "<group>"; };
+		AA5D7AB75129501FCEE2E610 /* DessertListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DessertListView.swift; sourceTree = "<group>"; };
+		72B7380E24698B27F39906D0 /* MenuItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemDetailView.swift; sourceTree = "<group>"; };
 		2BF0BCE3B55F46A5D0573D1E /* RestaurantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantView.swift; sourceTree = "<group>"; };
+		6338DFFD5185FC3BBE9B3E83 /* WineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WineListView.swift; sourceTree = "<group>"; };
+		0D8E8D052E42E393A55A2100 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4A1D29BB08912F70F9F2663A /* Velanera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Velanera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C02F3CBDF202EDD39D98E1E9 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		019F71200D4D3262B9687E35 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -193,7 +255,9 @@
 			isa = PBXGroup;
 			children = (
 				18798706EE4CFBFE40C35C32 /* AppEnvironment.swift */;
+				98B5DCE92EAED4BA09D0BAD0 /* AppDestination.swift */;
 				ECBB19CEB18CB2117EE045E3 /* RootTabView.swift */;
+				F3E9B6150F60FC8F776B6758 /* VelaneraRouter.swift */;
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -247,9 +311,14 @@
 				2AAF13A13178BFB9FBE69E70 /* LoungeOffering.swift */;
 				374C70AA025AA2E65C7F917D /* Allergen.swift */;
 				3F67932CB725D954CD64C0AC /* VenueEvent.swift */;
+				56C185F2D42C0D25DBA0B086 /* AvailabilitySlot.swift */;
 				594E3D3F234AC9FECB0977C1 /* UserProfile.swift */;
 				5AB41C9DE8105C63EDE89045 /* OpeningHours.swift */;
+				7068A58CCD19BB094C7BC6EB /* EventRSVP.swift */;
+				75EBCF23FCCE220DD138C322 /* ChefProfile.swift */;
+				9C44D270403CA3706D6A9BC9 /* AppSettings.swift */;
 				A2ED1B2138A0ED66C6132D80 /* SwiftDataModels.swift */;
+				F3EF3C61DB239201E416E498 /* GalleryAsset.swift */;
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -277,6 +346,7 @@
 				8908C2FD03A1312076BBFC8D /* PaymentService.swift */;
 				9D9201ED259711BED988011F /* PermissionService.swift */;
 				B67D600694499A7344E96424 /* NotificationService.swift */;
+				FDEC046A26DDF839B25A45AF /* SettingsStore.swift */;
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -316,10 +386,12 @@
 			children = (
 				2EA481780F58B1930BE4A760 /* HomeViewModel.swift */;
 				6E8EE5A7322C8A9AC24E0ED2 /* LoungeViewModel.swift */;
+				8FAD24C2EC027840E760E895 /* EventsViewModel.swift */;
 				934A6E4EF50576F26B74889A /* RestaurantViewModel.swift */;
 				A57C2F32DE971DA952404627 /* MembershipViewModel.swift */;
 				C1B569B0BABB3D93D92FE7A9 /* BookViewModel.swift */;
 				C410051BDE285A60DAC1A7B1 /* ConciergeViewModel.swift */;
+				CDBF3E4E74AEE46CAB4DF5BD /* SettingsViewModel.swift */;
 				CEA8E703C78CBD9C5DC1EA6B /* ProfileViewModel.swift */;
 			);
 			path = ViewModels;
@@ -328,9 +400,12 @@
 		38DF21AEF4612506D6BE5CBE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0D7626413CCF860C82715CA5 /* Settings */;
 				2FAEDE3E851F017B809CB742 /* Profile */;
 				394D40701680FCA248A47087 /* Restaurant */;
 				6B91405A1CDCFF4F2AD3C436 /* Membership */;
+				7AA67F4A9AB5070C95DE5337 /* Gallery */;
+				98FE62F13997D02D54DD16F8 /* Events */;
 				C7BE705B4475500DF5DB0C4E /* Book */;
 				D003045040B6999FF58DC165 /* Lounge */;
 				F8B2B8769456F41ED54C8DA0 /* Home */;
@@ -342,6 +417,7 @@
 		C7BE705B4475500DF5DB0C4E /* Book */ = {
 			isa = PBXGroup;
 			children = (
+				3D41063C868D0C768F9CE83A /* ReservationDetailView.swift */;
 				7873371D82BF77540B467BF1 /* BookView.swift */;
 			);
 			path = Book;
@@ -351,9 +427,29 @@
 			isa = PBXGroup;
 			children = (
 				914C5D5B3FF49B34B8CF5135 /* ConciergeView.swift */;
+				9E449065EC80920673577320 /* ConciergeArchiveView.swift */;
 				C50D40F87763E997F32FAFC3 /* TranscriptHistoryView.swift */;
+				CBB0EA973B020CFF594EDEEC /* StaffRequestStatusView.swift */;
 			);
 			path = Concierge;
+			sourceTree = "<group>";
+		};
+		98FE62F13997D02D54DD16F8 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				9BABDCF7C417F043D0358D91 /* EventsView.swift */;
+				BA05E2DB93E4324FD8FDCD0B /* EventDetailView.swift */;
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		7AA67F4A9AB5070C95DE5337 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				449C779D91CDED1AAEA42515 /* GalleryLightboxView.swift */;
+				7BEAE9CA8F402219901DBEA6 /* GalleryView.swift */;
+			);
+			path = Gallery;
 			sourceTree = "<group>";
 		};
 		F8B2B8769456F41ED54C8DA0 /* Home */ = {
@@ -367,7 +463,11 @@
 		D003045040B6999FF58DC165 /* Lounge */ = {
 			isa = PBXGroup;
 			children = (
+				06264B3CBB18DF34898357C0 /* LoungeOfferingDetailView.swift */;
+				16194018B02811DC6F9D6FF6 /* PrivateEventRequestView.swift */;
+				6323C44774AF0C954F618D7A /* DJDetailView.swift */;
 				AC4C6589C4508CCA8D83626E /* LoungeView.swift */;
+				D7D0CCDF244D94921800B5FD /* BottleServiceView.swift */;
 			);
 			path = Lounge;
 			sourceTree = "<group>";
@@ -376,6 +476,8 @@
 			isa = PBXGroup;
 			children = (
 				9ECF535F424FA370A47D9BE5 /* MembershipView.swift */;
+				9FD478F6DA45DBDF32F608D3 /* TierComparisonView.swift */;
+				FC045B99FA8CDB426D48831C /* MembershipUpgradeView.swift */;
 			);
 			path = Membership;
 			sourceTree = "<group>";
@@ -383,6 +485,7 @@
 		2FAEDE3E851F017B809CB742 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				3DD8E7919D76E4033E79C021 /* EditProfileView.swift */;
 				4E62B40E17545538CB384B54 /* ProfileView.swift */;
 			);
 			path = Profile;
@@ -391,9 +494,23 @@
 		394D40701680FCA248A47087 /* Restaurant */ = {
 			isa = PBXGroup;
 			children = (
+				04CF2D9D812E2A825451CC9F /* CocktailListView.swift */;
+				244E8AF4AFDD6CA9148B3301 /* AllergenGuideView.swift */;
 				2BF0BCE3B55F46A5D0573D1E /* RestaurantView.swift */;
+				6338DFFD5185FC3BBE9B3E83 /* WineListView.swift */;
+				72B7380E24698B27F39906D0 /* MenuItemDetailView.swift */;
+				AA5D7AB75129501FCEE2E610 /* DessertListView.swift */;
+				DCDBA697394CCB21CF5EB18F /* ChefView.swift */;
 			);
 			path = Restaurant;
+			sourceTree = "<group>";
+		};
+		0D7626413CCF860C82715CA5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0D8E8D052E42E393A55A2100 /* SettingsView.swift */;
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		1029F7BBD2FC8876965F659D /* Config */ = {
@@ -491,8 +608,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31D08E6086EE2EEC2BEDF54E /* AppDestination.swift in Sources */,
 				5350350DAE0B429AD4688CDE /* AppEnvironment.swift in Sources */,
 				9816C631EE22B59957CE20AA /* RootTabView.swift in Sources */,
+				8D47B5E55F9BCA66B87DC6AF /* VelaneraRouter.swift in Sources */,
 				32E5130B66C62A390416D89A /* EventCard.swift in Sources */,
 				A68C5B642CAC2C4334DB635F /* FloatingConciergeButton.swift in Sources */,
 				F6DB8AEEE180494957FB8AF1 /* GlassCard.swift in Sources */,
@@ -512,7 +631,12 @@
 				A56290328E6EA110396B1284 /* Date+Extensions.swift in Sources */,
 				1CF932C0CE122CE2F9634F00 /* View+Luxury.swift in Sources */,
 				D535C432C3314749C6A71CAA /* Allergen.swift in Sources */,
+				95153758FAE46C7C9BF361E7 /* AppSettings.swift in Sources */,
+				3F66FFE017664B8AD2096217 /* AvailabilitySlot.swift in Sources */,
+				D59121D4384C52525D8DF987 /* ChefProfile.swift in Sources */,
 				EC4BD88FEBD14D1F6395C680 /* ConciergeMessage.swift in Sources */,
+				1D3641A3820A20FB867CD83F /* EventRSVP.swift in Sources */,
+				1824ED51EF56E85D4CF455AB /* GalleryAsset.swift in Sources */,
 				2E609BC409FE53F0B0A2514C /* LoungeOffering.swift in Sources */,
 				C8A3DD0EE347684648357243 /* Membership.swift in Sources */,
 				E249A59F5EAAE638C6C78876 /* MenuItem.swift in Sources */,
@@ -534,6 +658,7 @@
 				1A5EB1DD41C2EAFEACE45468 /* NotificationService.swift in Sources */,
 				3598EAC6A23FE08BADF5A152 /* PaymentService.swift in Sources */,
 				0701545AD57A3225A4C14D9C /* PermissionService.swift in Sources */,
+				E350F5494B4BDCC70E39FD0B /* SettingsStore.swift in Sources */,
 				24CD9406FAF172A16C6574F3 /* SpeechRecognizer.swift in Sources */,
 				4467A2BD5387E569C6D08066 /* VoicePlaybackService.swift in Sources */,
 				284C85351209E1126D174026 /* GlassModifier.swift in Sources */,
@@ -546,19 +671,42 @@
 				2514620C01814DABD9FA5001 /* VelaneraApp.swift in Sources */,
 				80AAB884B586FDB8F7ECE9B5 /* BookViewModel.swift in Sources */,
 				A63359CC8D09FFC438AC7971 /* ConciergeViewModel.swift in Sources */,
+				FED017EBEB536EB1FFC0451E /* EventsViewModel.swift in Sources */,
 				778F9654DAA64060105916D0 /* HomeViewModel.swift in Sources */,
 				3B13C7EC38522248EA27C711 /* LoungeViewModel.swift in Sources */,
 				B3A52A4DBCEB8CD3B9B80AD9 /* MembershipViewModel.swift in Sources */,
 				224A076674951BD2F575CC40 /* ProfileViewModel.swift in Sources */,
 				FD742EDD5C71149375E1311D /* RestaurantViewModel.swift in Sources */,
+				C63DCF4C53D347197280F1FD /* SettingsViewModel.swift in Sources */,
 				A5A2991C30648660C871C4F0 /* BookView.swift in Sources */,
+				DD8AEB91965865D315655E58 /* ReservationDetailView.swift in Sources */,
+				D4E3B7C8A3C3553725015C45 /* ConciergeArchiveView.swift in Sources */,
 				5ECA477364770C0291526BEF /* ConciergeView.swift in Sources */,
+				2EF15322B5B6046FBDAC1F46 /* StaffRequestStatusView.swift in Sources */,
 				52939FF2587D95F09C562243 /* TranscriptHistoryView.swift in Sources */,
+				1A7314AD89CF379B7F22B4D1 /* EventDetailView.swift in Sources */,
+				B8D81F9BDB36E7AB8AF4B2D8 /* EventsView.swift in Sources */,
+				17A7F8AC79D4D29F753DD33B /* GalleryLightboxView.swift in Sources */,
+				E5B3CA5EB3BC79717243F04E /* GalleryView.swift in Sources */,
 				2422ABA0CABC034E02107009 /* HomeView.swift in Sources */,
+				ADF39E33F738070BA80556B8 /* BottleServiceView.swift in Sources */,
+				1C8101EF0DBD0172259C1298 /* DJDetailView.swift in Sources */,
+				9F6BAB468549E9E4B6A1F082 /* LoungeOfferingDetailView.swift in Sources */,
 				E678CDDE4289F947FCC961F4 /* LoungeView.swift in Sources */,
+				04B847EFB0CA4F5B26DDAE2B /* PrivateEventRequestView.swift in Sources */,
+				A00776C35411C9BB9BD83535 /* MembershipUpgradeView.swift in Sources */,
 				0A260086695FBEEB604E8743 /* MembershipView.swift in Sources */,
+				AA12F7BCDF2159010AE73260 /* TierComparisonView.swift in Sources */,
+				90058422AC66BC4A39A103D7 /* EditProfileView.swift in Sources */,
 				0D28183264E1E279D009AC0D /* ProfileView.swift in Sources */,
+				3262699D757E8C3C492A9EDF /* AllergenGuideView.swift in Sources */,
+				34CE70EF6BF2EA34CF001AA4 /* ChefView.swift in Sources */,
+				F029B31CE84FEF2D9A0D8194 /* CocktailListView.swift in Sources */,
+				C245B63785B5E1CBC876729A /* DessertListView.swift in Sources */,
+				90F6BAEF2995D8AB3427E184 /* MenuItemDetailView.swift in Sources */,
 				D524B21DED2207D5BAE70FF9 /* RestaurantView.swift in Sources */,
+				9FA56AEAF69A76478E81763D /* WineListView.swift in Sources */,
+				E0FB988D62B0A1214BBB31A3 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

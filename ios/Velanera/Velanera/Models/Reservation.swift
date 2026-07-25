@@ -53,6 +53,10 @@ struct Reservation: Identifiable, Codable, Hashable, Sendable {
     var status: ReservationStatus
     var contactName: String
     var contactEmail: String
+    var contactPhone: String
+    var offeringID: UUID?
+    var occasion: String
+    var confirmationCode: String
 
     var displayTitle: String {
         switch venue {
@@ -70,7 +74,11 @@ struct Reservation: Identifiable, Codable, Hashable, Sendable {
         specialRequests: String = "",
         status: ReservationStatus = .pending,
         contactName: String,
-        contactEmail: String
+        contactEmail: String,
+        contactPhone: String = "",
+        offeringID: UUID? = nil,
+        occasion: String = "",
+        confirmationCode: String = ""
     ) {
         self.id = id
         self.venue = venue
@@ -80,5 +88,11 @@ struct Reservation: Identifiable, Codable, Hashable, Sendable {
         self.status = status
         self.contactName = contactName
         self.contactEmail = contactEmail
+        self.contactPhone = contactPhone
+        self.offeringID = offeringID
+        self.occasion = occasion
+        self.confirmationCode = confirmationCode.isEmpty
+            ? "VL-\(id.uuidString.prefix(8).uppercased())"
+            : confirmationCode
     }
 }

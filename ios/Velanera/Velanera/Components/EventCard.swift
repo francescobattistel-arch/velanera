@@ -34,13 +34,25 @@ struct EventCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: VelaneraSpacing.radiusMd, style: .continuous))
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(event.date.bookingDateLabel.uppercased())
-                            .font(VelaneraTypography.label(11))
-                            .foregroundStyle(VelaneraColors.gold)
-                            .tracking(1.4)
+                        HStack {
+                            Text(event.date.bookingDateLabel.uppercased())
+                                .font(VelaneraTypography.label(11))
+                                .foregroundStyle(VelaneraColors.gold)
+                                .tracking(1.4)
+                            if event.isMembersOnly {
+                                Text("MEMBERS")
+                                    .font(VelaneraTypography.label(9))
+                                    .foregroundStyle(VelaneraColors.matteBlack)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(VelaneraColors.champagne)
+                                    .clipShape(Capsule())
+                            }
+                        }
                         Text(event.title)
                             .font(VelaneraTypography.headline(20))
                             .foregroundStyle(VelaneraColors.ivory)
+                            .multilineTextAlignment(.leading)
                     }
                     .padding(VelaneraSpacing.md)
                 }
@@ -49,6 +61,7 @@ struct EventCard: View {
                     .font(VelaneraTypography.caption())
                     .foregroundStyle(VelaneraColors.secondaryText)
                     .lineLimit(2)
+                    .multilineTextAlignment(.leading)
             }
         }
         .buttonStyle(.plain)

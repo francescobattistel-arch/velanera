@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Unified booking for restaurant, lounge, and private events.
+/// Unified booking engine with availability slots and confirmation.
 struct BookView: View {
     @Environment(AppEnvironment.self) private var environment
     @Environment(\.modelContext) private var modelContext
+    @State private var selectedTab: AppTab = .book
     @State private var viewModel: BookViewModel?
 
     var body: some View {
@@ -12,8 +13,7 @@ struct BookView: View {
                 Text("Reserve")
                     .font(VelaneraTypography.title(34))
                     .foregroundStyle(VelaneraColors.ivory)
-
-                Text("Restaurant, lounge, or a private evening — we will confirm with care.")
+                Text("Restaurant, lounge, or a private evening — availability first, then confirmation.")
                     .font(VelaneraTypography.body(15))
                     .foregroundStyle(VelaneraColors.secondaryText)
 
@@ -31,6 +31,7 @@ struct BookView: View {
         .background(VelaneraColors.ambientGradient.ignoresSafeArea())
         .navigationTitle("Book")
         .navigationBarTitleDisplayMode(.inline)
+        .velaneraRouter(selectedTab: $selectedTab)
         .onAppear {
             if viewModel == nil {
                 viewModel = BookViewModel(
@@ -39,6 +40,9 @@ struct BookView: View {
                     analytics: environment.analyticsService
                 )
             }
+        }
+        .task(id: "\(viewModel?.venue.rawValue ?? "")-\(viewModel?.date.timeIntervalSince1970 ?? 0)-\(viewModel?.guestCount ?? 0)") {
+            await viewModel?.loadAvailability()
         }
     }
 
@@ -53,7 +57,7 @@ struct BookView: View {
                 "Venue",
                 selection: Binding(
                     get: { viewModel?.venue ?? .restaurant },
-                    set: { viewModel?.venue = $0 }
+                    set: { viewModel?.venue = $0; viewModel?.selectedSlot = nil }
                 )
             ) {
                 ForEach(VenueType.allCases, id: \.self) { venue in
@@ -65,13 +69,13 @@ struct BookView: View {
             GlassCard {
                 VStack(spacing: VelaneraSpacing.md) {
                     DatePicker(
-                        "Date & time",
+                        "Date",
                         selection: Binding(
                             get: { viewModel?.date ?? .now },
                             set: { viewModel?.date = $0 }
                         ),
                         in: Date()...,
-                        displayedComponents: [.date, .hourAndMinute]
+                        displayedComponents: [.date]
                     )
                     .colorScheme(.dark)
                     .tint(VelaneraColors.gold)
@@ -86,29 +90,25 @@ struct BookView: View {
                     )
                     .foregroundStyle(VelaneraColors.ivory)
 
-                    TextField(
-                        "Full name",
-                        text: Binding(
-                            get: { viewModel?.contactName ?? "" },
-                            set: { viewModel?.contactName = $0 }
-                        )
-                    )
-                    .textContentType(.name)
-                    .padding()
-                    .glassBackground(cornerRadius: VelaneraSpacing.radiusSm)
-
-                    TextField(
-                        "Email",
-                        text: Binding(
-                            get: { viewModel?.contactEmail ?? "" },
-                            set: { viewModel?.contactEmail = $0 }
-                        )
-                    )
-                    .textContentType(.emailAddress)
+                    field("Full name", text: Binding(
+                        get: { viewModel?.contactName ?? "" },
+                        set: { viewModel?.contactName = $0 }
+                    ))
+                    field("Email", text: Binding(
+                        get: { viewModel?.contactEmail ?? "" },
+                        set: { viewModel?.contactEmail = $0 }
+                    ))
                     .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
-                    .padding()
-                    .glassBackground(cornerRadius: VelaneraSpacing.radiusSm)
+                    field("Phone", text: Binding(
+                        get: { viewModel?.contactPhone ?? "" },
+                        set: { viewModel?.contactPhone = $0 }
+                    ))
+                    .keyboardType(.phonePad)
+                    field("Occasion", text: Binding(
+                        get: { viewModel?.occasion ?? "" },
+                        set: { viewModel?.occasion = $0 }
+                    ))
 
                     TextField(
                         "Special requests",
@@ -123,6 +123,46 @@ struct BookView: View {
                     .glassBackground(cornerRadius: VelaneraSpacing.radiusSm)
                 }
                 .foregroundStyle(VelaneraColors.ivory)
+            }
+
+            SectionHeader(title: "Availability", subtitle: "Select a time")
+            if viewModel?.isLoadingSlots == true {
+                LoadingSkeleton(height: 72)
+            } else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 88), spacing: 8)], spacing: 8) {
+                    ForEach(viewModel?.slots ?? []) { slot in
+                        Button {
+                            viewModel?.selectedSlot = slot
+                            HapticFeedback.light()
+                        } label: {
+                            VStack(spacing: 4) {
+                                Text(slot.label)
+                                    .font(VelaneraTypography.label(12))
+                                Text(slot.isAvailable ? "Open" : "Full")
+                                    .font(VelaneraTypography.label(9))
+                                    .foregroundStyle(slot.isAvailable ? VelaneraColors.success : VelaneraColors.danger)
+                            }
+                            .foregroundStyle(
+                                viewModel?.selectedSlot?.id == slot.id
+                                ? VelaneraColors.matteBlack
+                                : VelaneraColors.champagne
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(
+                                        viewModel?.selectedSlot?.id == slot.id
+                                        ? VelaneraColors.gold
+                                        : VelaneraColors.elevated
+                                    )
+                            )
+                            .opacity(slot.isAvailable ? 1 : 0.4)
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(!slot.isAvailable)
+                    }
+                }
             }
 
             if let error = viewModel?.errorMessage {
@@ -140,6 +180,7 @@ struct BookView: View {
             }
             .disabled(viewModel?.canSubmit != true)
             .opacity(viewModel?.canSubmit == true ? 1 : 0.5)
+            .goldShimmer(isActive: viewModel?.canSubmit == true)
         }
     }
 
@@ -156,9 +197,12 @@ struct BookView: View {
                     .font(VelaneraTypography.title(28))
                     .foregroundStyle(VelaneraColors.ivory)
 
-                ReservationCard(reservation: reservation)
+                NavigationLink(value: AppDestination.reservationDetail(reservation.id)) {
+                    ReservationCard(reservation: reservation)
+                }
+                .buttonStyle(.plain)
 
-                Text("A confirmation will be sent to \(reservation.contactEmail). Future backend delivery will automate this.")
+                Text("Confirmation \(reservation.confirmationCode) · \(reservation.contactEmail)")
                     .font(VelaneraTypography.caption())
                     .foregroundStyle(VelaneraColors.secondaryText)
                     .multilineTextAlignment(.center)
@@ -170,5 +214,11 @@ struct BookView: View {
             .frame(maxWidth: .infinity)
             .luxuryAppear()
         }
+    }
+
+    private func field(_ title: String, text: Binding<String>) -> some View {
+        TextField(title, text: text)
+            .padding()
+            .glassBackground(cornerRadius: VelaneraSpacing.radiusSm)
     }
 }

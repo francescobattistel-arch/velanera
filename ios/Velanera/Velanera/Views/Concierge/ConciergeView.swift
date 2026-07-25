@@ -10,15 +10,19 @@ struct ConciergeView: View {
     @State private var viewModel: ConciergeViewModel?
 
     var body: some View {
-        ZStack {
-            VelaneraColors.ambientGradient.ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                VelaneraColors.ambientGradient.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                header
-                TranscriptHistoryView(messages: viewModel?.messages ?? [])
-                Spacer(minLength: VelaneraSpacing.md)
-                voiceStage
+                VStack(spacing: 0) {
+                    header
+                    suggestedPrompts
+                    TranscriptHistoryView(messages: viewModel?.messages ?? [])
+                    Spacer(minLength: VelaneraSpacing.md)
+                    voiceStage
+                }
             }
+            .velaneraRouter(selectedTab: .constant(.home))
         }
         .onAppear {
             if viewModel == nil {
@@ -27,10 +31,12 @@ struct ConciergeView: View {
                     voicePlayback: environment.voicePlayback,
                     conversationEngine: environment.conversationEngine,
                     permissions: environment.permissionService,
-                    analytics: environment.analyticsService
+                    analytics: environment.analyticsService,
+                    apiClient: environment.apiClient,
+                    settingsStore: environment.settingsStore
                 )
             }
-            viewModel?.onAppear()
+            viewModel?.onAppear(modelContext: modelContext)
         }
     }
 
@@ -45,6 +51,18 @@ struct ConciergeView: View {
                     .foregroundStyle(VelaneraColors.secondaryText)
             }
             Spacer()
+            Menu {
+                NavigationLink(value: AppDestination.staffRequests) {
+                    Label("Staff requests", systemImage: "tray.full")
+                }
+                NavigationLink(value: AppDestination.conciergeArchive) {
+                    Label("Archive", systemImage: "waveform")
+                }
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .foregroundStyle(VelaneraColors.champagne)
+                    .padding(10)
+            }
             Button {
                 environment.voicePlayback.stop()
                 dismiss()
@@ -59,6 +77,32 @@ struct ConciergeView: View {
         .pagePadding()
         .padding(.top, VelaneraSpacing.md)
         .matchedGeometryEffect(id: "concierge-fab", in: namespace)
+    }
+
+    @ViewBuilder
+    private var suggestedPrompts: some View {
+        if viewModel?.isRecording != true, viewModel?.isProcessing != true {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(viewModel?.suggestedPrompts ?? [], id: \.self) { prompt in
+                        Button {
+                            Task { await viewModel?.sendSuggestion(prompt, modelContext: modelContext) }
+                        } label: {
+                            Text(prompt)
+                                .font(VelaneraTypography.label(11))
+                                .foregroundStyle(VelaneraColors.champagne)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(VelaneraColors.elevated)
+                                .clipShape(Capsule())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .pagePadding()
+            }
+            .padding(.vertical, VelaneraSpacing.sm)
+        }
     }
 
     private var voiceStage: some View {
@@ -88,11 +132,13 @@ struct ConciergeView: View {
             }
 
             if let request = viewModel?.latestStaffRequest {
-                Text("Staff review created · \(request.summary)")
-                    .font(VelaneraTypography.label(11))
-                    .foregroundStyle(VelaneraColors.gold)
-                    .padding(.horizontal)
-                    .multilineTextAlignment(.center)
+                NavigationLink(value: AppDestination.staffRequests) {
+                    Text("Staff review created · \(request.summary)")
+                        .font(VelaneraTypography.label(11))
+                        .foregroundStyle(VelaneraColors.gold)
+                        .padding(.horizontal)
+                        .multilineTextAlignment(.center)
+                }
             }
 
             VoiceButton(

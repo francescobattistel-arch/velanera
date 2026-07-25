@@ -9,60 +9,70 @@ public final class APIClient: APIClientProtocol, @unchecked Sendable {
     private let configuration: APIConfiguration
     private let session: URLSession
     private let mockResponder: MockAPIResponder
+    private let authTokenProvider: @Sendable () -> String?
 
-    /// Creates a client with injectable session and configuration.
+    /// Creates a client with injectable session, configuration, and optional bearer token.
     public init(
         configuration: APIConfiguration = .load(),
         session: URLSession = .shared,
-        mockResponder: MockAPIResponder = MockAPIResponder()
+        mockResponder: MockAPIResponder = MockAPIResponder(),
+        authTokenProvider: @escaping @Sendable () -> String? = { nil }
     ) {
         self.configuration = configuration
         self.session = session
         self.mockResponder = mockResponder
+        self.authTokenProvider = authTokenProvider
     }
 
-    public func fetchHomeFeed() async throws -> HomeFeedResponse {
-        try await send(.homeFeed)
+    public func fetchHomeFeed() async throws -> HomeFeedResponse { try await send(.homeFeed) }
+    public func fetchMenu() async throws -> [MenuItem] { try await send(.menu) }
+    public func fetchMenuItem(id: UUID) async throws -> MenuItem { try await send(.menuItem(id)) }
+    public func fetchChef() async throws -> ChefProfile { try await send(.chef) }
+    public func fetchLoungeOfferings() async throws -> [LoungeOffering] { try await send(.lounge) }
+    public func fetchLoungeOffering(id: UUID) async throws -> LoungeOffering { try await send(.loungeOffering(id)) }
+    public func fetchEvents() async throws -> [VenueEvent] { try await send(.events) }
+    public func fetchEvent(id: UUID) async throws -> VenueEvent { try await send(.event(id)) }
+    public func fetchGallery() async throws -> [GalleryAsset] { try await send(.gallery) }
+    public func fetchOpeningHours() async throws -> OpeningHours { try await send(.openingHours) }
+    public func fetchAvailability(_ query: AvailabilityQueryDTO) async throws -> [AvailabilitySlot] {
+        try await send(.availability(query))
     }
-
-    public func fetchMenu() async throws -> [MenuItem] {
-        try await send(.menu)
-    }
-
-    public func fetchLoungeOfferings() async throws -> [LoungeOffering] {
-        try await send(.lounge)
-    }
-
-    public func fetchEvents() async throws -> [VenueEvent] {
-        try await send(.events)
-    }
-
-    public func fetchOpeningHours() async throws -> OpeningHours {
-        try await send(.openingHours)
-    }
-
     public func createReservation(_ request: ReservationRequestDTO) async throws -> Reservation {
         try await send(.createReservation(request))
     }
-
-    public func fetchMembership() async throws -> Membership {
-        try await send(.membership)
+    public func updateReservation(id: UUID, update: ReservationUpdateDTO) async throws -> Reservation {
+        try await send(.updateReservation(id, update))
     }
-
-    public func fetchProfile() async throws -> UserProfile {
-        try await send(.profile)
+    public func cancelReservation(id: UUID) async throws -> Reservation {
+        try await send(.cancelReservation(id))
     }
-
+    public func fetchMembership() async throws -> Membership { try await send(.membership) }
+    public func fetchMembershipTiers() async throws -> [MembershipTierInfo] {
+        let response: MembershipTiersResponse = try await send(.membershipTiers)
+        return response.tiers
+    }
+    public func fetchProfile() async throws -> UserProfile { try await send(.profile) }
+    public func updateProfile(_ update: ProfileUpdateDTO) async throws -> UserProfile {
+        try await send(.updateProfile(update))
+    }
     public func sendConciergeMessage(_ request: ConciergeChatRequestDTO) async throws -> ConciergeResponse {
         try await send(.conciergeChat(request))
     }
-
     public func createConciergeRequest(_ request: ConciergeRequestDTO) async throws -> ConciergeRequest {
         try await send(.createConciergeRequest(request))
     }
-
-    public func fetchExclusiveEvents() async throws -> [VenueEvent] {
-        try await send(.exclusiveEvents)
+    public func fetchConciergeRequests() async throws -> [ConciergeRequest] {
+        try await send(.conciergeRequests)
+    }
+    public func fetchExclusiveEvents() async throws -> [VenueEvent] { try await send(.exclusiveEvents) }
+    public func rsvpEvent(_ request: EventRSVPRequestDTO) async throws -> EventRSVP {
+        try await send(.rsvpEvent(request))
+    }
+    public func confirmPayment(_ request: PaymentConfirmDTO) async throws -> PaymentReceipt {
+        try await send(.confirmPayment(request))
+    }
+    public func registerPushToken(_ request: PushTokenDTO) async throws -> PushRegistrationResponse {
+        try await send(.registerPushToken(request))
     }
 
     private func send<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
@@ -81,6 +91,9 @@ public final class APIClient: APIClientProtocol, @unchecked Sendable {
         request.httpMethod = endpoint.method
         request.timeoutInterval = configuration.requestTimeout
         request.setValue("application/json", forHTTPHeaderField: "Accept")
+        if let token = authTokenProvider() {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         if let body = endpoint.body {
             request.httpBody = body
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -88,9 +101,7 @@ public final class APIClient: APIClientProtocol, @unchecked Sendable {
 
         do {
             let (data, response) = try await session.data(for: request)
-            guard let http = response as? HTTPURLResponse else {
-                throw APIError.invalidResponse
-            }
+            guard let http = response as? HTTPURLResponse else { throw APIError.invalidResponse }
             guard (200..<300).contains(http.statusCode) else {
                 if http.statusCode == 401 { throw APIError.unauthorized }
                 throw APIError.httpStatus(http.statusCode)

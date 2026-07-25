@@ -12,6 +12,9 @@ final class PersistedReservation {
     var statusRaw: String
     var contactName: String
     var contactEmail: String
+    var contactPhone: String
+    var occasion: String
+    var confirmationCode: String
 
     init(from reservation: Reservation) {
         self.id = reservation.id
@@ -22,6 +25,9 @@ final class PersistedReservation {
         self.statusRaw = reservation.status.rawValue
         self.contactName = reservation.contactName
         self.contactEmail = reservation.contactEmail
+        self.contactPhone = reservation.contactPhone
+        self.occasion = reservation.occasion
+        self.confirmationCode = reservation.confirmationCode
     }
 
     var asReservation: Reservation {
@@ -33,8 +39,24 @@ final class PersistedReservation {
             specialRequests: specialRequests,
             status: ReservationStatus(rawValue: statusRaw) ?? .pending,
             contactName: contactName,
-            contactEmail: contactEmail
+            contactEmail: contactEmail,
+            contactPhone: contactPhone,
+            occasion: occasion,
+            confirmationCode: confirmationCode
         )
+    }
+
+    func apply(_ reservation: Reservation) {
+        venueRaw = reservation.venue.rawValue
+        date = reservation.date
+        guestCount = reservation.guestCount
+        specialRequests = reservation.specialRequests
+        statusRaw = reservation.status.rawValue
+        contactName = reservation.contactName
+        contactEmail = reservation.contactEmail
+        contactPhone = reservation.contactPhone
+        occasion = reservation.occasion
+        confirmationCode = reservation.confirmationCode
     }
 }
 
@@ -86,6 +108,7 @@ final class PersistedUserProfile {
     @Attribute(.unique) var id: UUID
     var displayName: String
     var email: String
+    var phone: String
     var authProviderRaw: String
     var notificationsEnabled: Bool
 
@@ -93,6 +116,7 @@ final class PersistedUserProfile {
         self.id = profile.id
         self.displayName = profile.displayName
         self.email = profile.email
+        self.phone = profile.phone
         self.authProviderRaw = profile.authProvider.rawValue
         self.notificationsEnabled = profile.notificationsEnabled
     }
@@ -102,6 +126,7 @@ final class PersistedUserProfile {
             id: id,
             displayName: displayName,
             email: email,
+            phone: phone,
             authProvider: AuthProvider(rawValue: authProviderRaw) ?? .none,
             notificationsEnabled: notificationsEnabled
         )

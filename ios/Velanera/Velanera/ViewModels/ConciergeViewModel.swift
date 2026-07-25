@@ -12,8 +12,11 @@ final class ConciergeViewModel {
     private let conversationEngine: ConversationEngineProtocol
     private let permissions: PermissionServiceProtocol
     private let analytics: AnalyticsServiceProtocol
+    private let apiClient: APIClientProtocol
+    private let settingsStore: SettingsStore
 
     var messages: [ConciergeMessage] = []
+    var staffRequests: [ConciergeRequest] = []
     var liveTranscript: String = ""
     var audioLevels: [CGFloat] = Array(repeating: 0.12, count: 24)
     var isRecording = false
@@ -21,23 +24,34 @@ final class ConciergeViewModel {
     var permissionDenied = false
     var errorMessage: String?
     var latestStaffRequest: ConciergeRequest?
+    var suggestedPrompts: [String] = [
+        "Book a table for two on Friday",
+        "Recommend a wine with lamb",
+        "VIP lounge for Saturday",
+        "What's the dress code?"
+    ]
 
     init(
         speechRecognizer: SpeechRecognizerProtocol,
         voicePlayback: VoicePlaybackServiceProtocol,
         conversationEngine: ConversationEngineProtocol,
         permissions: PermissionServiceProtocol,
-        analytics: AnalyticsServiceProtocol
+        analytics: AnalyticsServiceProtocol,
+        apiClient: APIClientProtocol,
+        settingsStore: SettingsStore
     ) {
         self.speechRecognizer = speechRecognizer
         self.voicePlayback = voicePlayback
         self.conversationEngine = conversationEngine
         self.permissions = permissions
         self.analytics = analytics
+        self.apiClient = apiClient
+        self.settingsStore = settingsStore
     }
 
-    func onAppear() {
+    func onAppear(modelContext: ModelContext) {
         analytics.track(event: .conciergeOpened)
+        loadPersistedHistory(modelContext: modelContext)
         if messages.isEmpty {
             messages.append(
                 ConciergeMessage(
@@ -46,6 +60,22 @@ final class ConciergeViewModel {
                 )
             )
         }
+        Task { await refreshStaffRequests() }
+    }
+
+    func loadPersistedHistory(modelContext: ModelContext) {
+        var descriptor = FetchDescriptor<ConciergeTranscriptEntry>(
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
+        )
+        descriptor.fetchLimit = 40
+        let entries = (try? modelContext.fetch(descriptor)) ?? []
+        if !entries.isEmpty {
+            messages = entries.map(\.asMessage)
+        }
+    }
+
+    func refreshStaffRequests() async {
+        staffRequests = (try? await apiClient.fetchConciergeRequests()) ?? []
     }
 
     func beginHoldToTalk() async {
@@ -75,6 +105,11 @@ final class ConciergeViewModel {
         liveTranscript = transcript
         audioLevels = Array(repeating: 0.12, count: 24)
         await process(transcript: transcript, modelContext: modelContext)
+    }
+
+    func sendSuggestion(_ text: String, modelContext: ModelContext) async {
+        guard !isRecording, !isProcessing else { return }
+        await process(transcript: text, modelContext: modelContext)
     }
 
     private func pollTranscript() {
@@ -115,7 +150,12 @@ final class ConciergeViewModel {
             messages.append(reply)
             modelContext.insert(ConciergeTranscriptEntry(from: reply))
             latestStaffRequest = staffRequest
-            voicePlayback.speak(response.reply)
+            if staffRequest != nil {
+                await refreshStaffRequests()
+            }
+            if settingsStore.settings.conciergeVoiceEnabled {
+                voicePlayback.speak(response.reply)
+            }
             HapticFeedback.success()
         } catch {
             errorMessage = error.localizedDescription

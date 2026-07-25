@@ -9,15 +9,12 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: VelaneraSpacing.xl) {
-                HeroMediaView(
-                    primaryActionTitle: "Reserve Restaurant"
-                ) {
+                HeroMediaView(primaryActionTitle: "Reserve Restaurant") {
                     selectedTab = .book
                 }
 
                 if viewModel == nil {
-                    LoadingSkeletonList()
-                        .pagePadding()
+                    LoadingSkeletonList().pagePadding()
                 } else {
                     feedContent
                 }
@@ -33,7 +30,14 @@ struct HomeView: View {
                     .tracking(4)
                     .foregroundStyle(VelaneraColors.gold)
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: AppDestination.eventsList) {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(VelaneraColors.champagne)
+                }
+            }
         }
+        .velaneraRouter(selectedTab: $selectedTab)
         .task {
             if viewModel == nil {
                 viewModel = HomeViewModel(
@@ -43,30 +47,36 @@ struct HomeView: View {
             }
             await viewModel?.load()
         }
-        .refreshable {
-            await viewModel?.load()
-        }
+        .refreshable { await viewModel?.load() }
     }
 
     @ViewBuilder
     private var feedContent: some View {
         if viewModel?.isLoading == true && viewModel?.featuredDishes.isEmpty == true {
-            LoadingSkeletonList()
-                .pagePadding()
+            LoadingSkeletonList().pagePadding()
         } else if let error = viewModel?.errorMessage, viewModel?.featuredDishes.isEmpty == true {
-            Text(error)
-                .foregroundStyle(VelaneraColors.danger)
-                .pagePadding()
+            Text(error).foregroundStyle(VelaneraColors.danger).pagePadding()
         } else {
             section(title: "Featured Dishes", subtitle: "Signatures from the kitchen") {
                 ForEach(viewModel?.featuredDishes ?? []) { item in
-                    MenuCard(item: item)
+                    NavigationLink(value: AppDestination.menuItem(item.id)) {
+                        MenuCard(item: item)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
 
             section(title: "Chef Specials", subtitle: "Seasonal compositions") {
+                NavigationLink(value: AppDestination.chef) {
+                    Text("Meet the chef")
+                        .font(VelaneraTypography.label(12))
+                        .foregroundStyle(VelaneraColors.gold)
+                }
                 ForEach(viewModel?.chefSpecials ?? []) { item in
-                    MenuCard(item: item)
+                    NavigationLink(value: AppDestination.menuItem(item.id)) {
+                        MenuCard(item: item)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
 
@@ -74,17 +84,22 @@ struct HomeView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: VelaneraSpacing.md) {
                         ForEach(viewModel?.events ?? []) { event in
-                            EventCard(event: event)
-                                .frame(width: 260)
+                            NavigationLink(value: AppDestination.eventDetail(event.id)) {
+                                EventCard(event: event).frame(width: 260)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
+                }
+                NavigationLink(value: AppDestination.eventsList) {
+                    Text("View all events")
+                        .font(VelaneraTypography.label(12))
+                        .foregroundStyle(VelaneraColors.gold)
                 }
             }
 
             VStack(spacing: VelaneraSpacing.sm) {
-                LuxuryButton(title: "Reserve Restaurant", systemImage: "fork.knife") {
-                    selectedTab = .book
-                }
+                LuxuryButton(title: "Reserve Restaurant", systemImage: "fork.knife") { selectedTab = .book }
                 LuxuryButton(title: "Reserve Lounge", style: .secondary, systemImage: "moon.stars") {
                     selectedTab = .lounge
                 }
@@ -93,19 +108,24 @@ struct HomeView: View {
             .luxuryAppear(delay: 0.15)
 
             section(title: "Gallery", subtitle: "Moments from the house") {
-                LazyVGrid(
-                    columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
-                    spacing: 10
-                ) {
-                    ForEach(viewModel?.gallerySymbols ?? [], id: \.self) { symbol in
-                        RoundedRectangle(cornerRadius: VelaneraSpacing.radiusSm, style: .continuous)
-                            .fill(VelaneraColors.elevated)
-                            .frame(height: 96)
-                            .overlay {
-                                Image(systemName: symbol)
-                                    .foregroundStyle(VelaneraColors.softGold.opacity(0.8))
-                            }
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                    ForEach(viewModel?.gallery.prefix(6) ?? [], id: \.id) { asset in
+                        NavigationLink(value: AppDestination.galleryItem(asset.id)) {
+                            RoundedRectangle(cornerRadius: VelaneraSpacing.radiusSm, style: .continuous)
+                                .fill(VelaneraColors.elevated)
+                                .frame(height: 96)
+                                .overlay {
+                                    Image(systemName: asset.symbolName)
+                                        .foregroundStyle(VelaneraColors.softGold.opacity(0.8))
+                                }
+                        }
+                        .buttonStyle(.plain)
                     }
+                }
+                NavigationLink(value: AppDestination.gallery) {
+                    Text("Open gallery")
+                        .font(VelaneraTypography.label(12))
+                        .foregroundStyle(VelaneraColors.gold)
                 }
             }
 
@@ -115,8 +135,7 @@ struct HomeView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(hours.days) { day in
                                 HStack {
-                                    Text(day.day)
-                                        .foregroundStyle(VelaneraColors.ivory)
+                                    Text(day.day).foregroundStyle(VelaneraColors.ivory)
                                     Spacer()
                                     VStack(alignment: .trailing, spacing: 2) {
                                         Text("R \(day.restaurant)")

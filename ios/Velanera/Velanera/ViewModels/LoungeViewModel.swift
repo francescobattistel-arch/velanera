@@ -9,6 +9,7 @@ final class LoungeViewModel {
 
     var offerings: [LoungeOffering] = []
     var events: [VenueEvent] = []
+    var gallery: [GalleryAsset] = []
     var isLoading = false
     var errorMessage: String?
 
@@ -21,7 +22,11 @@ final class LoungeViewModel {
     }
 
     var upcomingDJs: [VenueEvent] {
-        events.filter { !$0.isMembersOnly }
+        events.filter { $0.kind == .dj }.sorted { $0.date < $1.date }
+    }
+
+    var bottleService: [LoungeOffering] {
+        offerings(for: .bottleService)
     }
 
     func load() async {
@@ -30,8 +35,10 @@ final class LoungeViewModel {
         do {
             async let lounge = apiClient.fetchLoungeOfferings()
             async let venueEvents = apiClient.fetchEvents()
+            async let assets = apiClient.fetchGallery()
             offerings = try await lounge
             events = try await venueEvents
+            gallery = try await assets.filter { $0.collection == .lounge }
         } catch {
             errorMessage = error.localizedDescription
         }
