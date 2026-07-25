@@ -1,0 +1,12 @@
+name = "velanera-concierge"
+main = "src/worker.js"
+compatibility_date = "2026-07-01"
+
+# Set secrets (never commit):
+#   npx wrangler secret put OPENAI_API_KEY
+# Optional vars:
+#   OPENAI_MODEL=gpt-4.1
+
+[vars]
+OPENAI_MODEL = "gpt-4.1"
+ALLOWED_ORIGINS = "https://velanera.co,https://www.velanera.co,https://francescobattistel-arch.github.io,http://localhost:5173,http://127.0.0.1:5173"
