@@ -23,4 +23,8 @@ enum AppDestination: Hashable {
     case settings
     case staffRequests
     case conciergeArchive
+    case openingHours
+    case location
+    case privacy
+    case terms
 }

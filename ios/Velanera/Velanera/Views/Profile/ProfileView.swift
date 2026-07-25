@@ -99,8 +99,11 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: VelaneraSpacing.md) {
             SectionHeader(title: "Reservations", subtitle: "Stored on this device")
             if persistedReservations.isEmpty {
-                Text("No reservations yet.")
-                    .foregroundStyle(VelaneraColors.secondaryText)
+                EmptyStateView(
+                    title: "No reservations yet",
+                    message: "Book a table or lounge experience and it will appear here.",
+                    systemImage: "calendar"
+                )
             } else {
                 ForEach(persistedReservations, id: \.id) { item in
                     NavigationLink(value: AppDestination.reservationDetail(item.id)) {
@@ -116,8 +119,11 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: VelaneraSpacing.md) {
             SectionHeader(title: "Favourite Dishes", subtitle: "Saved from the menu")
             if favourites.isEmpty {
-                Text("Heart a dish in Restaurant to save it here.")
-                    .foregroundStyle(VelaneraColors.secondaryText)
+                EmptyStateView(
+                    title: "No favourites yet",
+                    message: "Heart a dish in Restaurant to save it here.",
+                    systemImage: "heart"
+                )
             } else {
                 ForEach(favourites, id: \.dishID) { favourite in
                     NavigationLink(value: AppDestination.menuItem(favourite.dishID)) {

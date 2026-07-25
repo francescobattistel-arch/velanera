@@ -28,8 +28,6 @@ struct VelaneraApp: App {
                 .preferredColorScheme(.dark)
                 .tint(VelaneraColors.gold)
                 .dynamicTypeSize(...DynamicTypeSize.accessibility3)
-                .statusBarHidden(false)
-                .persistentSystemOverlays(.automatic)
         }
         .modelContainer(sharedModelContainer)
     }

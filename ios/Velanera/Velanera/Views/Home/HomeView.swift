@@ -133,7 +133,7 @@ struct HomeView: View {
                 section(title: "Opening Hours", subtitle: hours.address) {
                     GlassCard {
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(hours.days) { day in
+                            ForEach(hours.days.prefix(4)) { day in
                                 HStack {
                                     Text(day.day).foregroundStyle(VelaneraColors.ivory)
                                     Spacer()
@@ -141,15 +141,20 @@ struct HomeView: View {
                                         Text("R \(day.restaurant)")
                                         Text("L \(day.lounge)")
                                     }
-                                    .font(VelaneraTypography.caption())
+                                    .font(VelaneraTypography.captionScaled)
                                     .foregroundStyle(VelaneraColors.secondaryText)
                                 }
-                                .font(VelaneraTypography.caption())
+                                .font(VelaneraTypography.captionScaled)
                             }
                             Divider().overlay(VelaneraColors.glassStroke)
-                            Link(destination: mapURL(for: hours)) {
-                                Label("Open in Maps", systemImage: "map")
-                                    .font(VelaneraTypography.label(12))
+                            NavigationLink(value: AppDestination.openingHours) {
+                                Text("Full hours")
+                                    .font(VelaneraTypography.labelScaled)
+                                    .foregroundStyle(VelaneraColors.gold)
+                            }
+                            NavigationLink(value: AppDestination.location) {
+                                Label("Directions & contact", systemImage: "map")
+                                    .font(VelaneraTypography.labelScaled)
                                     .foregroundStyle(VelaneraColors.gold)
                             }
                         }
@@ -172,8 +177,4 @@ struct HomeView: View {
         .luxuryAppear()
     }
 
-    private func mapURL(for hours: OpeningHours) -> URL {
-        let query = hours.mapQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Velanera"
-        return URL(string: "http://maps.apple.com/?q=\(query)")!
-    }
 }

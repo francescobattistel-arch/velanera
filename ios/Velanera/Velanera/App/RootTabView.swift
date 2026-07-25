@@ -8,8 +8,11 @@ enum AppTab: Hashable {
 struct RootTabView: View {
     @Environment(AppEnvironment.self) private var environment
     @State private var selectedTab: AppTab = .home
-    @State private var showConcierge = true
+    @State private var showConcierge = false
+    @State private var showOnboarding = false
     @Namespace private var conciergeNamespace
+
+    private let onboardingKey = "velanera.didCompleteOnboarding"
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -53,7 +56,7 @@ struct RootTabView: View {
             .toolbarBackground(.ultraThinMaterial, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
 
-            if !showConcierge {
+            if !showConcierge && !showOnboarding {
                 FloatingConciergeButton {
                     withAnimation(ProMotion.spring()) {
                         showConcierge = true
@@ -66,12 +69,31 @@ struct RootTabView: View {
             }
         }
         .background(VelaneraColors.matteBlack.ignoresSafeArea())
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView {
+                UserDefaults.standard.set(true, forKey: onboardingKey)
+                showOnboarding = false
+                showConcierge = true
+            }
+        }
         .fullScreenCover(isPresented: $showConcierge) {
             ConciergeView(namespace: conciergeNamespace)
                 .presentationBackground(VelaneraColors.matteBlack)
         }
         .onAppear {
             environment.analyticsService.track(event: .screenView("root"))
+            let completed = UserDefaults.standard.bool(forKey: onboardingKey)
+            if completed {
+                showConcierge = true
+            } else {
+                showOnboarding = true
+            }
+        }
+        .onChange(of: selectedTab) { _, newTab in
+            // Apply lounge/private booking drafts when user lands on Book.
+            if newTab == .book {
+                // BookView consumes draft on appear.
+            }
         }
     }
 }

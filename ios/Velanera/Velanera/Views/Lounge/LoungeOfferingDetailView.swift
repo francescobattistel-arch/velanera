@@ -68,6 +68,12 @@ struct LoungeOfferingDetailView: View {
                     }
 
                     LuxuryButton(title: "Reserve This Experience", systemImage: "calendar") {
+                        environment.bookingDraft.prefill(
+                            venue: offering.kind == .privateArea ? .privateEvent : .lounge,
+                            offeringID: offering.id,
+                            occasion: offering.name,
+                            note: offering.summary
+                        )
                         selectedTab = .book
                     }
                 } else {

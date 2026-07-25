@@ -21,6 +21,7 @@ enum MockBackend {
 
     static let menu: [MenuItem] = [
         MenuItem(
+            id: StableID.menu(1),
             name: "Citrus Cured Sea Bass",
             description: "Yuzu, fennel pollen, olive oil.",
             longDescription: "Line-caught sea bass cured overnight in citrus and yuzu, finished with fennel pollen and a thread of Ligurian olive oil.",
@@ -28,6 +29,7 @@ enum MockBackend {
             pairingNote: "Pairs with Chablis Premier Cru.", dietaryTags: ["Pescatarian"]
         ),
         MenuItem(
+            id: StableID.menu(2),
             name: "Burrata & Heirloom Tomato",
             description: "Aged balsamic, basil oil.",
             longDescription: "Cream-filled burrata with late-summer heirloom tomatoes, 12-year balsamic, and basil oil.",
@@ -35,12 +37,14 @@ enum MockBackend {
             dietaryTags: ["Vegetarian"]
         ),
         MenuItem(
+            id: StableID.menu(3),
             name: "Hand-Cut Beef Tartare",
             description: "Caper berry, smoked egg yolk.",
             longDescription: "Aberdeen Angus tartare with smoked egg yolk emulsion, fried caper berries, and rye crisp.",
             price: 19, category: .starters, allergens: [.eggs, .gluten], symbolName: "flame"
         ),
         MenuItem(
+            id: StableID.menu(4),
             name: "Charcoal Lamb Cutlets",
             description: "Smoked aubergine, rosemary jus.",
             longDescription: "Welsh lamb cutlets grilled over charcoal, smoked aubergine purée, rosemary jus, and preserved lemon.",
@@ -48,6 +52,7 @@ enum MockBackend {
             pairingNote: "Barolo Riserva."
         ),
         MenuItem(
+            id: StableID.menu(5),
             name: "Lobster Tagliolini",
             description: "Shell bisque, chilli, lemon.",
             longDescription: "Fresh tagliolini tossed in lobster shell bisque with chilli, lemon zest, and sweet claw meat.",
@@ -55,6 +60,7 @@ enum MockBackend {
             isChefRecommendation: true, symbolName: "fork.knife"
         ),
         MenuItem(
+            id: StableID.menu(6),
             name: "Line-Caught Halibut",
             description: "Brown butter, samphire, lemon.",
             longDescription: "Pan-roasted halibut with brown butter, marsh samphire, and confit lemon.",
@@ -62,6 +68,7 @@ enum MockBackend {
             dietaryTags: ["Pescatarian"]
         ),
         MenuItem(
+            id: StableID.menu(7),
             name: "Charred Hispi Cabbage",
             description: "Miso butter, toasted seeds.",
             longDescription: "Hispi cabbage charred and glazed with white miso butter, sesame, and pumpkin seeds.",
@@ -69,6 +76,7 @@ enum MockBackend {
             dietaryTags: ["Vegetarian"]
         ),
         MenuItem(
+            id: StableID.menu(8),
             name: "Dark Chocolate Nemesis",
             description: "Olive oil ice cream, sea salt.",
             longDescription: "Intense flourless chocolate with Arbequina olive oil ice cream and Maldon salt.",
@@ -76,36 +84,42 @@ enum MockBackend {
             dietaryTags: ["Vegetarian"]
         ),
         MenuItem(
+            id: StableID.menu(9),
             name: "Amalfi Lemon Tart",
             description: "Italian meringue, thyme.",
             longDescription: "Burnished lemon tart with Amalfi zest, Italian meringue, and lemon thyme.",
             price: 13, category: .desserts, allergens: [.gluten, .eggs, .dairy], symbolName: "sun.max"
         ),
         MenuItem(
+            id: StableID.menu(10),
             name: "Velanera Spritz",
             description: "Bergamot, prosecco, bitter orange.",
             longDescription: "House bergamot cordial, prosecco, bitter orange, and a twist of grapefruit.",
             price: 14, category: .cocktails, symbolName: "wineglass", abv: "11%"
         ),
         MenuItem(
+            id: StableID.menu(11),
             name: "Smoked Old Fashioned",
             description: "Bourbon, demerara, applewood.",
             longDescription: "Buffalo Trace, demerara, Angostura, finished under applewood smoke.",
             price: 16, category: .cocktails, isChefRecommendation: true, symbolName: "mug.fill", abv: "32%"
         ),
         MenuItem(
+            id: StableID.menu(12),
             name: "Harbour Martini",
             description: "Gin, dry vermouth, olive brine.",
             longDescription: "London dry gin stirred with Dolin dry and a measured olive brine rinse.",
             price: 15, category: .cocktails, symbolName: "wineglass.fill", abv: "28%"
         ),
         MenuItem(
+            id: StableID.menu(13),
             name: "Midnight Negroni",
             description: "Gin, cocoa bitter, vermouth.",
             longDescription: "Classic proportions with a cocoa-nib bitter for late hours.",
             price: 15, category: .cocktails, symbolName: "moon.stars", abv: "26%"
         ),
         MenuItem(
+            id: StableID.menu(14),
             name: "Chablis Premier Cru",
             description: "Mineral, citrus, precise.",
             longDescription: "Premier Cru Chablis with crushed stone, citrus pith, and a long saline finish.",
@@ -114,6 +128,7 @@ enum MockBackend {
             wineRegion: "Burgundy, France", wineVintage: "2022", wineGrape: "Chardonnay", abv: "13%"
         ),
         MenuItem(
+            id: StableID.menu(15),
             name: "Barolo Riserva",
             description: "Dried cherry, tar, velvet tannin.",
             longDescription: "Riserva Nebbiolo — dried cherry, rose, tar, and fine velvet tannin.",
@@ -122,6 +137,7 @@ enum MockBackend {
             wineRegion: "Piedmont, Italy", wineVintage: "2016", wineGrape: "Nebbiolo", abv: "14.5%"
         ),
         MenuItem(
+            id: StableID.menu(16),
             name: "Sancerre Les Romains",
             description: "Gooseberry, flint, white blossom.",
             longDescription: "Loire Sauvignon Blanc with gooseberry, flint, and white blossom.",
@@ -129,6 +145,7 @@ enum MockBackend {
             wineRegion: "Loire, France", wineVintage: "2023", wineGrape: "Sauvignon Blanc", abv: "13%"
         ),
         MenuItem(
+            id: StableID.menu(17),
             name: "Champagne Grand Cru",
             description: "Brioche, citrus, fine mousse.",
             longDescription: "Grower Grand Cru with brioche, citrus oil, and a precise mousse.",
@@ -136,6 +153,7 @@ enum MockBackend {
             wineRegion: "Champagne, France", wineVintage: "NV", wineGrape: "Pinot Noir / Chardonnay", abv: "12.5%"
         ),
         MenuItem(
+            id: StableID.menu(18),
             name: "Chef's Tasting Prelude",
             description: "Five-course seasonal composition.",
             longDescription: "A five-course progression composed each morning from the market — paced, precise, and quietly luxurious.",
@@ -143,6 +161,7 @@ enum MockBackend {
             pairingNote: "Optional wine pairing +£65."
         ),
         MenuItem(
+            id: StableID.menu(19),
             name: "Truffle Risotto Interlude",
             description: "Carnaroli, black truffle, aged Parmesan.",
             longDescription: "Mid-menu interlude of Carnaroli risotto finished tableside with black truffle.",
@@ -165,6 +184,7 @@ enum MockBackend {
 
     static let lounge: [LoungeOffering] = [
         LoungeOffering(
+            id: StableID.lounge(1),
             name: "Salon Table",
             summary: "Intimate booth for four with ambient lighting.",
             detail: "A low-lit salon booth with dedicated host attention and chilled champagne service on arrival.",
@@ -173,6 +193,7 @@ enum MockBackend {
             minimumSpend: 250
         ),
         LoungeOffering(
+            id: StableID.lounge(2),
             name: "Terrace VIP",
             summary: "Elevated seating with skyline aspect.",
             detail: "Open-air terrace seating for six with skyline aspect and bottle service ready.",
@@ -181,6 +202,7 @@ enum MockBackend {
             minimumSpend: 450
         ),
         LoungeOffering(
+            id: StableID.lounge(3),
             name: "The Library",
             summary: "Private room with dedicated host.",
             detail: "Book-lined private room for twelve — ideal for celebrations requiring discretion.",
@@ -189,6 +211,7 @@ enum MockBackend {
             minimumSpend: 1200
         ),
         LoungeOffering(
+            id: StableID.lounge(4),
             name: "Founders' Chamber",
             summary: "Ultra-private celebrations and tastings.",
             detail: "Our most private chamber for twenty guests — founders' dinners, proposals, and rare tastings.",
@@ -197,6 +220,7 @@ enum MockBackend {
             minimumSpend: 2500
         ),
         LoungeOffering(
+            id: StableID.lounge(5),
             name: "Champagne Ritual",
             summary: "Magnum presentation with caviar service.",
             detail: "Tableside magnum presentation with oscietra caviar and crystal service.",
@@ -204,6 +228,7 @@ enum MockBackend {
             includes: ["Magnum champagne", "Caviar service", "Tableside ritual"]
         ),
         LoungeOffering(
+            id: StableID.lounge(6),
             name: "Rare Spirits Flight",
             summary: "Curated whiskies and cognacs tableside.",
             detail: "A guided flight of rare whiskies and cognacs, paced by our spirits host.",
@@ -211,6 +236,7 @@ enum MockBackend {
             includes: ["Guided tasting", "Printed pairing notes", "Water ceremony"]
         ),
         LoungeOffering(
+            id: StableID.lounge(7),
             name: "Dom Pérignon Service",
             summary: "Vintage champagne, sabrage on request.",
             detail: "Dom Pérignon served with optional sabrage and gold ice presentation.",
@@ -222,6 +248,7 @@ enum MockBackend {
     static var events: [VenueEvent] {
         [
             VenueEvent(
+                id: StableID.event(1),
                 title: "Midnight Jazz",
                 subtitle: "Live trio in the lounge.",
                 detail: "An intimate midnight set with double bass, piano, and brushed drums in the salon.",
@@ -231,6 +258,7 @@ enum MockBackend {
                 capacity: 60, remainingSpaces: 18
             ),
             VenueEvent(
+                id: StableID.event(2),
                 title: "DJ Liora",
                 subtitle: "Deep house until late.",
                 detail: "DJ Liora returns with a deep-house journey through the terrace and main room.",
@@ -239,6 +267,7 @@ enum MockBackend {
                 capacity: 120, remainingSpaces: 34, dressCode: "Dark elegance"
             ),
             VenueEvent(
+                id: StableID.event(3),
                 title: "Members' Harvest Supper",
                 subtitle: "Exclusive seasonal tasting.",
                 detail: "A members-only harvest supper with chef Alessandra — five courses, rare pours.",
@@ -247,6 +276,7 @@ enum MockBackend {
                 venueLabel: "Restaurant", capacity: 40, remainingSpaces: 8
             ),
             VenueEvent(
+                id: StableID.event(4),
                 title: "Sunset Aperitivo",
                 subtitle: "Terrace sparkling hour.",
                 detail: "Golden-hour sparkling service on the terrace with light Mediterranean bites.",
@@ -255,6 +285,7 @@ enum MockBackend {
                 capacity: 50, remainingSpaces: 22
             ),
             VenueEvent(
+                id: StableID.event(5),
                 title: "DJ Noor",
                 subtitle: "Afro-house and late ritual.",
                 detail: "DJ Noor brings afro-house energy with a late-night ritual set.",
@@ -263,6 +294,7 @@ enum MockBackend {
                 capacity: 120, remainingSpaces: 55
             ),
             VenueEvent(
+                id: StableID.event(6),
                 title: "Barolo Masterclass",
                 subtitle: "Sommelier-led tasting.",
                 detail: "A guided flight of Barolo and Nebbiolo with our sommelier.",
@@ -274,17 +306,18 @@ enum MockBackend {
     }
 
     static let gallery: [GalleryAsset] = [
-        .init(title: "Salon Light", caption: "Low light, quiet conversation.", symbolName: "light.max", collection: .restaurant),
-        .init(title: "Chef's Pass", caption: "Composition at the pass.", symbolName: "fork.knife.circle", collection: .restaurant),
-        .init(title: "Wine Cellar", caption: "Burgundy to Barolo.", symbolName: "wineglass", collection: .restaurant),
-        .init(title: "After Dark", caption: "Lounge energy.", symbolName: "moon.stars", collection: .lounge),
-        .init(title: "Terrace Midnight", caption: "Skyline aspect.", symbolName: "building.2", collection: .lounge),
-        .init(title: "Bottle Ritual", caption: "Tableside ceremony.", symbolName: "sparkles", collection: .lounge),
-        .init(title: "Jazz Night", caption: "Midnight trio.", symbolName: "music.mic", collection: .events),
-        .init(title: "Members' Table", caption: "Harvest supper.", symbolName: "crown", collection: .membership)
+        .init(id: StableID.gallery(1), title: "Salon Light", caption: "Low light, quiet conversation.", symbolName: "lightbulb.max", collection: .restaurant),
+        .init(id: StableID.gallery(2), title: "Chef's Pass", caption: "Composition at the pass.", symbolName: "fork.knife.circle", collection: .restaurant),
+        .init(id: StableID.gallery(3), title: "Wine Cellar", caption: "Burgundy to Barolo.", symbolName: "wineglass", collection: .restaurant),
+        .init(id: StableID.gallery(4), title: "After Dark", caption: "Lounge energy.", symbolName: "moon.stars", collection: .lounge),
+        .init(id: StableID.gallery(5), title: "Terrace Midnight", caption: "Skyline aspect.", symbolName: "building.2", collection: .lounge),
+        .init(id: StableID.gallery(6), title: "Bottle Ritual", caption: "Tableside ceremony.", symbolName: "sparkles", collection: .lounge),
+        .init(id: StableID.gallery(7), title: "Jazz Night", caption: "Midnight trio.", symbolName: "music.mic", collection: .events),
+        .init(id: StableID.gallery(8), title: "Members' Table", caption: "Harvest supper.", symbolName: "crown", collection: .membership)
     ]
 
     static let membership = Membership(
+        id: StableID.make("membership", 1),
         memberName: "Guest",
         tier: .house,
         loyaltyPoints: 1840,
