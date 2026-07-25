@@ -6,8 +6,9 @@ protocol VoicePlaybackServiceProtocol: AnyObject, Sendable {
     @MainActor func stop()
 }
 
-/// Speaks concierge replies with a warm, intimate female host voice.
-/// Avoids Samantha (iPhone default) so the host does not sound unchanged.
+/// Speaks concierge replies with a distinctly non-default host voice.
+/// Never uses Samantha (iPhone en-US default). Prefers Italian Alice for a
+/// Mediterranean host presence when speaking English.
 @MainActor
 public final class VoicePlaybackService: NSObject, VoicePlaybackServiceProtocol, AVSpeechSynthesizerDelegate {
     private let synthesizer = AVSpeechSynthesizer()
@@ -21,10 +22,10 @@ public final class VoicePlaybackService: NSObject, VoicePlaybackServiceProtocol,
         stop()
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = Self.preferredHostVoice()
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.78
-        utterance.pitchMultiplier = 0.88
-        utterance.preUtteranceDelay = 0.2
-        utterance.postUtteranceDelay = 0.15
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.84
+        utterance.pitchMultiplier = 1.05
+        utterance.preUtteranceDelay = 0.15
+        utterance.postUtteranceDelay = 0.12
 
         do {
             let session = AVAudioSession.sharedInstance()
@@ -43,39 +44,26 @@ public final class VoicePlaybackService: NSObject, VoicePlaybackServiceProtocol,
         }
     }
 
-    /// Prefer non-default female accents (Karen / Moira / Tessa) over Samantha.
     private static func preferredHostVoice() -> AVSpeechSynthesisVoice? {
         let voices = AVSpeechSynthesisVoice.speechVoices()
-        let preferredNames = [
-            "Karen", "Moira", "Tessa", "Fiona", "Kate", "Serena", "Ava", "Zoe"
-        ]
-        let blocked = ["Samantha", "Alex", "Daniel", "Arthur", "Aaron", "Fred"]
 
-        for name in preferredNames {
-            if let match = voices.first(where: { voice in
-                voice.name.localizedCaseInsensitiveContains(name)
-                    && voice.language.hasPrefix("en")
-                    && !blocked.contains(where: { voice.name.localizedCaseInsensitiveContains($0) })
-            }) {
-                return match
-            }
+        func named(_ name: String) -> AVSpeechSynthesisVoice? {
+            voices.first { $0.name.compare(name, options: [.caseInsensitive]) == .orderedSame }
         }
 
-        let english = voices.filter { voice in
-            guard voice.language.hasPrefix("en") else { return false }
-            let n = voice.name.lowercased()
-            if blocked.contains(where: { n.contains($0.lowercased()) }) { return false }
-            if n.contains("male") && !n.contains("female") { return false }
-            return true
-        }
-
-        return english.first(where: { $0.language.hasPrefix("en-AU") })
-            ?? english.first(where: { $0.language.hasPrefix("en-IE") })
-            ?? english.first(where: { $0.quality == .enhanced })
-            ?? english.first(where: { $0.language.hasPrefix("en-GB") })
-            ?? english.first
+        // Italian Alice → Irish Moira → Australian Karen → South African Tessa
+        // Never Samantha (en-US stock).
+        return named("Alice")
+            ?? voices.first(where: { $0.language.hasPrefix("it-IT") && $0.name.localizedCaseInsensitiveContains("Alice") })
+            ?? voices.first(where: { $0.language.hasPrefix("it") })
+            ?? named("Moira")
+            ?? voices.first(where: { $0.language.hasPrefix("en-IE") })
+            ?? named("Karen")
+            ?? voices.first(where: { $0.language.hasPrefix("en-AU") })
+            ?? named("Tessa")
+            ?? voices.first(where: { $0.language.hasPrefix("en-ZA") })
+            ?? AVSpeechSynthesisVoice(language: "it-IT")
+            ?? AVSpeechSynthesisVoice(language: "en-IE")
             ?? AVSpeechSynthesisVoice(language: "en-AU")
-            ?? AVSpeechSynthesisVoice(language: "en-GB")
-            ?? AVSpeechSynthesisVoice(language: "en-US")
     }
 }
