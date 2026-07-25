@@ -84,6 +84,7 @@
     reservation: null,
     recognition: null,
     interim: "",
+    online: false,
   };
 
   function escapeHtml(s) {
@@ -465,16 +466,39 @@
     return String(window.VELANERA_CONFIG?.conciergeApiBase || "").replace(/\/$/, "");
   }
 
-  function usingGPT() {
-    return Boolean(apiBase());
-  }
-
   function updateConciergeSub() {
     const el = $("#conciergeSub");
     if (!el) return;
-    el.textContent = usingGPT()
-      ? "GPT concierge · hold or type"
-      : "Demo mode · connect OpenAI worker for GPT";
+    if (state.online) {
+      el.textContent = "AI Concierge Online";
+      el.classList.add("online");
+      el.classList.remove("offline");
+      return;
+    }
+    el.textContent = apiBase()
+      ? "AI Concierge connecting…"
+      : "AI Concierge offline";
+    el.classList.add("offline");
+    el.classList.remove("online");
+  }
+
+  async function checkConciergeHealth() {
+    const base = apiBase();
+    updateConciergeSub();
+    if (!base) {
+      state.online = false;
+      updateConciergeSub();
+      return false;
+    }
+    try {
+      const res = await fetch(`${base}/health`, { method: "GET", cache: "no-store" });
+      const data = await res.json().catch(() => ({}));
+      state.online = res.ok && data.status === "ok";
+    } catch {
+      state.online = false;
+    }
+    updateConciergeSub();
+    return state.online;
   }
 
   function actionsFromIds(ids) {
@@ -491,15 +515,15 @@
 
   async function askOpenAI(transcript) {
     const base = apiBase();
-    if (!base) return null;
+    if (!base) throw new Error("Concierge API base is not configured");
 
     const history = state.messages
       .filter((m) => m.role === "guest" || m.role === "host")
-      .slice(0, -1) // exclude the guest turn we just pushed
+      .slice(0, -1)
       .slice(-20)
       .map((m) => ({ role: m.role, text: m.text }));
 
-    const res = await fetch(`${base}/concierge/chat`, {
+    const res = await fetch(`${base}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transcript, history }),
@@ -511,6 +535,7 @@
     return {
       reply: data.reply || "How may I look after you?",
       actions: actionsFromIds(data.suggestedActions),
+      model: data.model,
     };
   }
 
@@ -518,28 +543,31 @@
     const cleaned = text.trim();
     if (!cleaned || state.processing) return;
     state.processing = true;
-    $("#talkBadge").textContent = usingGPT() ? "Asking GPT…" : "Thinking…";
+    $("#talkBadge").textContent = "Asking GPT…";
     $("#holdTalk").classList.add("processing");
     pushGuest(cleaned);
 
     try {
-      let result = null;
-      if (usingGPT()) {
-        try {
-          result = await askOpenAI(cleaned);
-        } catch (err) {
-          console.warn("Concierge API failed, using on-device fallback", err);
-          pushHost(
-            "I couldn’t reach the GPT host just now — continuing with the local concierge.",
-            []
-          );
-        }
+      if (!state.online) {
+        await checkConciergeHealth();
       }
-      if (!result) {
-        // Keep multi-turn booking locally when GPT isn’t configured
-        result = respondTo(cleaned);
+      if (!state.online) {
+        pushHost(
+          "The AI Concierge is offline right now. Please try again in a moment.",
+          []
+        );
+        return;
       }
+      const result = await askOpenAI(cleaned);
       pushHost(result.reply, result.actions || []);
+    } catch (err) {
+      console.warn("Concierge API failed", err);
+      state.online = false;
+      updateConciergeSub();
+      pushHost(
+        "I couldn’t reach the AI Concierge. Please try again shortly.",
+        []
+      );
     } finally {
       state.processing = false;
       $("#talkBadge").textContent = SpeechRecognition ? "Hold to Talk" : "Hold or type";
@@ -835,6 +863,7 @@
     paintSlots();
     buildWaveform();
     updateConciergeSub();
+    void checkConciergeHealth();
     if (!SpeechRecognition) {
       $("#talkBadge").textContent = "Hold or type";
     }

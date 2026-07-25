@@ -1,6 +1,7 @@
 /**
  * Velanera Concierge — OpenAI proxy (Cloudflare Worker).
- * Keeps OPENAI_API_KEY server-side. Called by the web prototype and (later) iOS.
+ * OPENAI_API_KEY must be provided as a Worker secret / deployment env binding.
+ * Never hardcode API keys.
  */
 
 const SYSTEM_PROMPT = `You are the voice concierge for Velanera Restaurant & Lounge — a luxury Mediterranean hospitality destination.
@@ -33,11 +34,14 @@ Respond ONLY with compact JSON:
 suggestedActions may include: "open-menu", "open-lounge", "open-book", "open-member" (only when helpful).`;
 
 function corsHeaders(origin, allowed) {
-  const list = allowed.split(",").map((s) => s.trim()).filter(Boolean);
+  const list = String(allowed || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
   const ok = origin && list.includes(origin) ? origin : list[0] || "*";
   return {
     "Access-Control-Allow-Origin": ok,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -87,7 +91,7 @@ async function chatWithOpenAI(env, transcript, history) {
     throw err;
   }
 
-  const model = env.OPENAI_MODEL || "gpt-4.1";
+  const model = env.OPENAI_MODEL || "gpt-5.5";
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
     ...mapHistory(history),
@@ -102,7 +106,6 @@ async function chatWithOpenAI(env, transcript, history) {
     },
     body: JSON.stringify({
       model,
-      temperature: 0.6,
       response_format: { type: "json_object" },
       messages,
     }),
@@ -131,6 +134,10 @@ async function chatWithOpenAI(env, transcript, history) {
   };
 }
 
+function isChatPath(pathname) {
+  return pathname === "/chat" || pathname === "/concierge/chat";
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -141,20 +148,15 @@ export default {
     }
 
     const url = new URL(request.url);
-    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/health")) {
-      return json(
-        {
-          ok: true,
-          service: "velanera-concierge",
-          model: env.OPENAI_MODEL || "gpt-4.1",
-          openaiConfigured: Boolean(env.OPENAI_API_KEY),
-        },
-        200,
-        cors
-      );
+
+    if (request.method === "GET" && url.pathname === "/health") {
+      if (!env.OPENAI_API_KEY) {
+        return json({ status: "error", error: "OPENAI_API_KEY missing" }, 503, cors);
+      }
+      return json({ status: "ok" }, 200, cors);
     }
 
-    if (request.method !== "POST" || url.pathname !== "/concierge/chat") {
+    if (request.method !== "POST" || !isChatPath(url.pathname)) {
       return json({ error: "Not found" }, 404, cors);
     }
 
@@ -165,7 +167,7 @@ export default {
       return json({ error: "Invalid JSON body" }, 400, cors);
     }
 
-    const transcript = String(body?.transcript || "").trim();
+    const transcript = String(body?.transcript || body?.message || "").trim();
     if (!transcript) {
       return json({ error: "transcript is required" }, 400, cors);
     }

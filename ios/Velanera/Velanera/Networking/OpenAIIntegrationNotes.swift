@@ -11,10 +11,10 @@ import Foundation
 /// The web prototype uses the same worker when `CONCIERGE_API_BASE` is configured.
 /// Toggle `APIConfiguration.useMockResponses` to `false` once the backend is live.
 public enum OpenAIIntegrationNotes {
-    public static let intendedBackendModel = "gpt-4.1"
+    public static let intendedBackendModel = "gpt-5.5"
     public static let systemPromptOwner = "server"
     public static let clientMustNotHoldAPIKeys = true
-    public static let workerPath = "/concierge/chat"
+    public static let workerPath = "/chat"
 
     /// Placeholder request shape the backend should accept.
     public struct BackendConciergeEnvelope: Codable, Sendable {

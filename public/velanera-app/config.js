@@ -1,5 +1,4 @@
-/** Injected/overwritten at Pages deploy when CONCIERGE_API_BASE is set. */
+/** Injected at deploy with the Cloudflare Worker URL. Never put API keys here. */
 window.VELANERA_CONFIG = {
-  /** Cloudflare Worker origin, e.g. https://velanera-concierge.example.workers.dev */
   conciergeApiBase: "",
 };
