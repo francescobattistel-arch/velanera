@@ -756,7 +756,7 @@
     if (state.listening || state.processing) return;
     state.listening = true;
     state.interim = "";
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    stopSpeak();
 
     const btn = $("#holdTalk");
     btn.classList.add("recording");
