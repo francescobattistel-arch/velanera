@@ -15,9 +15,10 @@ Standard commands are in `README.md` and `package.json` scripts (`dev`, `build`,
   Any "make booking work" task needs a real backend/provider (Formspree,
   OpenTable, Resy, etc.).
 - **Concierge GPT**: OpenAI must not be called from the static site or iOS
-  client. Use `workers/concierge/` (Cloudflare Worker) with secret
-  `OPENAI_API_KEY`, then set repo variable `CONCIERGE_API_BASE` to the worker
-  URL so Pages injects it into `public/velanera-app/config.js`.
+  client. Deploy `workers/concierge/` via **Deploy Concierge API** with secrets
+  `OPENAI_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`. The
+  workflow binds the OpenAI key into the Worker env, verifies `/health` +
+  `/chat` (GPT-5.5), and injects the worker URL into Pages (no demo mode).
 - **Deployment**: pushing to `main` runs `.github/workflows/deploy.yml`
   (GitHub Pages). Repo Settings → Pages must have Source = "GitHub Actions".
   The custom domain lives in `public/CNAME` (`velanera.co`) — do not delete it or

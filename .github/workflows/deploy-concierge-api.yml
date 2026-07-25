@@ -55,10 +55,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           set -euo pipefail
-          # Bind OPENAI_API_KEY into the Worker environment (secret — never logged)
-          printf '%s' "$OPENAI_API_KEY" | npx --yes wrangler@4 secret put OPENAI_API_KEY
-
-          # Deploy worker code + vars (model, CORS). Secret remains env binding.
+          # 1) Deploy Worker code + public vars (model, CORS). Never bake the API key into source.
           DEPLOY_LOG="$(mktemp)"
           npx --yes wrangler@4 deploy 2>&1 | tee "$DEPLOY_LOG"
 
@@ -69,6 +66,9 @@ jobs:
           fi
           echo "worker_url=$WORKER_URL" >> "$GITHUB_OUTPUT"
           echo "Worker URL: $WORKER_URL"
+
+          # 2) Bind OPENAI_API_KEY into the Worker deployment environment as a secret
+          printf '%s' "$OPENAI_API_KEY" | npx --yes wrangler@4 secret put OPENAI_API_KEY
 
       - name: Verify GET /health
         env:
