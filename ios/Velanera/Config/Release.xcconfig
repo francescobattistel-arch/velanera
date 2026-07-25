@@ -1,0 +1,4 @@
+// Release build settings for Velanera
+SWIFT_COMPILATION_MODE = wholemodule
+VELANERA_USE_MOCK_API = YES
+VALIDATE_PRODUCT = YES
