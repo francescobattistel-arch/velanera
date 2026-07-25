@@ -22,14 +22,14 @@ export default function Footer() {
           </a>
         </div>
         <p className="max-w-sm text-xs leading-relaxed text-cream/35">
-          No App Store listing — open{' '}
+          Try the interactive prototype at{' '}
           <a
-            href="https://velanera.co/#app"
+            href="/velanera-app/"
             className="text-gold underline decoration-gold/40 underline-offset-4 hover:text-gold"
           >
-            velanera.co/#app
-          </a>{' '}
-          in Safari and choose Add to Home Screen.
+            velanera.co/velanera-app
+          </a>
+          .
         </p>
         <p className="text-xs tracking-[0.2em] text-cream/30 uppercase">
           &copy; {new Date().getFullYear()} Velanera &middot; velanera.co

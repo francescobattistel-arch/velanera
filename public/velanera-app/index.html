@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <title>Velanera — App Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="phone-chrome">
+        <div class="dynamic-island"></div>
+        <div class="status-bar">
+          <span class="time" id="clock">9:41</span>
+          <span class="status-icons">◐ ▮▮▮  батаре</span>
+        </div>
+
+        <!-- ONBOARDING -->
+        <section class="screen screen-onboarding active" data-screen="onboarding">
+          <div class="onboard-glow"></div>
+          <img class="host-lg" src="./assets/concierge-host.png" alt="Velanera Concierge" />
+          <div class="onboard-copy">
+            <p class="eyebrow">VELANERA</p>
+            <h1 id="onboardTitle">Welcome</h1>
+            <p id="onboardBody">A luxury restaurant & lounge companion — menus, evenings, membership, and your AI Concierge.</p>
+          </div>
+          <div class="dots" id="onboardDots"></div>
+          <button class="btn-gold" id="onboardNext">Continue</button>
+        </section>
+
+        <!-- CONCIERGE (primary) -->
+        <section class="screen screen-concierge" data-screen="concierge">
+          <header class="concierge-header">
+            <div>
+              <h1 class="brand">VELANERA</h1>
+              <p class="sub">Your concierge is listening</p>
+            </div>
+            <button class="icon-btn" id="closeConcierge" aria-label="Close">✕</button>
+          </header>
+
+          <div class="suggestions" id="suggestions"></div>
+
+          <div class="transcript" id="transcript"></div>
+
+          <div class="voice-stage">
+            <div class="waveform" id="waveform" aria-hidden="true"></div>
+            <p class="live-text" id="liveText"></p>
+            <button class="host-talk" id="holdTalk" aria-label="Hold to talk">
+              <span class="pulse-ring"></span>
+              <img src="./assets/concierge-host.png" alt="" />
+              <span class="talk-badge" id="talkBadge">Hold to Talk</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- APP SHELL WITH TABS -->
+        <section class="screen screen-app" data-screen="app">
+          <div class="app-scroll" id="appScroll">
+            <!-- HOME -->
+            <div class="tab-page active" data-tab="home">
+              <div class="hero">
+                <div class="hero-veil"></div>
+                <p class="eyebrow gold">VELANERA</p>
+                <h2>Restaurant & Lounge</h2>
+                <p class="lede">An intimate Mediterranean evening, composed with quiet luxury.</p>
+                <button class="btn-gold sm" data-go-tab="book">Reserve</button>
+              </div>
+              <div class="pad">
+                <div class="section-head">
+                  <h3>Featured</h3>
+                  <button class="link" data-go-tab="restaurant">Menu</button>
+                </div>
+                <div class="cards" id="homeDishes"></div>
+                <div class="section-head">
+                  <h3>Events</h3>
+                  <span class="muted">This week</span>
+                </div>
+                <div class="events-row" id="homeEvents"></div>
+                <div class="cta-stack">
+                  <button class="btn-gold" data-go-tab="book">Reserve Restaurant</button>
+                  <button class="btn-ghost" data-go-tab="lounge">Reserve Lounge</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RESTAURANT -->
+            <div class="tab-page" data-tab="restaurant">
+              <div class="pad top">
+                <h2 class="page-title">The Menu</h2>
+                <p class="lede">Mediterranean compositions, precise wine, evening cocktails.</p>
+                <div class="chips" id="menuChips"></div>
+                <div class="cards" id="menuList"></div>
+              </div>
+            </div>
+
+            <!-- LOUNGE -->
+            <div class="tab-page" data-tab="lounge">
+              <div class="lounge-hero">
+                <h2>After Dark</h2>
+                <p>VIP tables, private rooms, bottle service.</p>
+              </div>
+              <div class="pad">
+                <div class="cards" id="loungeList"></div>
+              </div>
+            </div>
+
+            <!-- BOOK -->
+            <div class="tab-page" data-tab="book">
+              <div class="pad top">
+                <h2 class="page-title">Reserve</h2>
+                <p class="lede">Availability first — then confirmation with care.</p>
+                <div class="glass form">
+                  <label>Experience
+                    <select id="bookVenue">
+                      <option value="restaurant">Restaurant</option>
+                      <option value="lounge">Lounge</option>
+                      <option value="private">Private Event</option>
+                    </select>
+                  </label>
+                  <label>Guests
+                    <input type="number" id="bookGuests" min="1" max="40" value="2" />
+                  </label>
+                  <label>Name
+                    <input type="text" id="bookName" placeholder="Full name" />
+                  </label>
+                  <div class="section-head tight"><h3>Availability</h3></div>
+                  <div class="slots" id="bookSlots"></div>
+                  <button class="btn-gold" id="bookSubmit">Confirm Reservation</button>
+                  <p class="confirm-msg" id="bookConfirm" hidden></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- MEMBERSHIP -->
+            <div class="tab-page" data-tab="membership">
+              <div class="pad top">
+                <h2 class="page-title">Membership</h2>
+                <div class="member-card">
+                  <div class="member-top">
+                    <div>
+                      <p class="eyebrow gold">VELANERA</p>
+                      <h3>House</h3>
+                    </div>
+                    <span class="crown">♛</span>
+                  </div>
+                  <div class="member-bottom">
+                    <div>
+                      <p class="name">Guest</p>
+                      <p class="muted">1,840 pts · Member since Nov 2025</p>
+                    </div>
+                    <div class="qr" aria-hidden="true"></div>
+                  </div>
+                </div>
+                <div class="glass benefits">
+                  <h3>Benefits</h3>
+                  <ul>
+                    <li>Preferred restaurant seating</li>
+                    <li>Lounge entry on selected nights</li>
+                    <li>Birthday amenity</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- PROFILE -->
+            <div class="tab-page" data-tab="profile">
+              <div class="pad top">
+                <h2 class="page-title">Guest</h2>
+                <p class="lede">guest@velanera.co</p>
+                <div class="glass">
+                  <p class="muted">Reservations and favourites sync on this device in the native app. This prototype showcases the experience.</p>
+                </div>
+                <button class="btn-ghost" id="openConciergeAgain">Open Concierge</button>
+              </div>
+            </div>
+          </div>
+
+          <nav class="tabbar" id="tabbar">
+            <button data-tab="home" class="active"><span>◇</span>Home</button>
+            <button data-tab="restaurant"><span>☰</span>Menu</button>
+            <button data-tab="lounge"><span>☾</span>Lounge</button>
+            <button data-tab="book"><span>○</span>Book</button>
+            <button data-tab="membership"><span>♛</span>Member</button>
+            <button data-tab="profile"><span>●</span>Profile</button>
+          </nav>
+
+          <button class="fab-concierge" id="fabConcierge" aria-label="Open Concierge">
+            <img src="./assets/concierge-host.png" alt="" />
+            <span>Concierge</span>
+          </button>
+        </section>
+      </div>
+    </div>
+
+    <aside class="showcase-meta">
+      <p class="eyebrow gold">VELANERA · iOS PROTOTYPE</p>
+      <h1>Voice-first luxury hospitality</h1>
+      <p>Interactive showcase of the native SwiftUI app — Concierge, Restaurant, Lounge, Booking & Membership. Optimised for iPhone.</p>
+      <ol>
+        <li>Walk through onboarding</li>
+        <li>Hold the host portrait to talk</li>
+        <li>Explore tabs below</li>
+      </ol>
+      <p class="meta-note">Open this page on your iPhone for the best feel. Native build still requires Xcode later — see <code>MAC_ONLY_CHECKLIST.md</code>.</p>
+    </aside>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>

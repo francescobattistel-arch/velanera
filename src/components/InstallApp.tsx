@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 
-const APP_URL = 'https://velanera.co/#app'
+const APP_URL = 'https://velanera.co/velanera-app/'
+const APP_PATH = '/velanera-app/'
 
 const steps = [
-  'Open velanera.co in Safari on your iPhone',
-  'Tap the Share button (square with an arrow up)',
-  'Scroll and tap Add to Home Screen',
-  'Tap Add — Velanera appears on your Home Screen',
+  'Open the interactive prototype on your iPhone',
+  'Walk through onboarding, then hold the host to talk',
+  'Explore Menu, Lounge, Book, Membership, and Profile',
+  'Optional: Safari → Share → Add to Home Screen for fullscreen',
 ]
 
 export default function InstallApp() {
@@ -14,7 +15,6 @@ export default function InstallApp() {
 
   useEffect(() => {
     if (window.location.hash !== '#app') return
-    // SPA: #app is not in the DOM until React mounts, so re-scroll after paint.
     requestAnimationFrame(() => {
       document.getElementById('app')?.scrollIntoView({ behavior: 'smooth' })
     })
@@ -26,7 +26,6 @@ export default function InstallApp() {
       setCopied(true)
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback for older Safari
       window.prompt('Copy this link:', APP_URL)
     }
   }
@@ -35,8 +34,8 @@ export default function InstallApp() {
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({
-          title: 'Velanera — Get the App',
-          text: 'Install Velanera on your Home Screen from Safari (no App Store).',
+          title: 'Velanera — App Prototype',
+          text: 'Try the Velanera voice-first hospitality experience.',
           url: APP_URL,
         })
         return
@@ -56,23 +55,23 @@ export default function InstallApp() {
       <div className="mx-auto max-w-2xl px-6 text-center">
         <div className="fade-up">
           <p className="mb-4 text-xs tracking-luxe text-gold/80 uppercase">
-            iPhone · Safari · not App Store
+            iPhone · interactive prototype
           </p>
           <h2 id="app-heading" className="text-4xl md:text-5xl">
             Get the App
           </h2>
           <div className="hairline mx-auto my-7 h-px w-28" />
           <p className="text-cream/65">
-            There is no App Store listing. Install Velanera from this page in
-            Safari — Add to Home Screen — for a fullscreen app icon, including
-            offline browsing.
+            Preview the native Velanera experience — voice Concierge, menu,
+            lounge, booking, and membership — in a high-fidelity phone
+            prototype. No App Store required.
           </p>
           <p className="mt-5">
             <a
-              href={APP_URL}
+              href={APP_PATH}
               className="inline-block border border-gold bg-gold px-8 py-3 text-sm tracking-[0.22em] text-ink uppercase transition-colors hover:bg-transparent hover:text-gold"
             >
-              Open install guide · velanera.co/#app
+              Open app prototype
             </a>
           </p>
         </div>
@@ -97,19 +96,19 @@ export default function InstallApp() {
             onClick={() => void shareLink()}
             className="border border-gold/50 px-8 py-3 text-sm tracking-[0.22em] text-cream uppercase transition-colors hover:border-gold hover:text-gold"
           >
-            Share install link
+            Share prototype
           </button>
           <button
             type="button"
             onClick={() => void copyLink()}
             className="border border-gold/50 px-8 py-3 text-sm tracking-[0.22em] text-cream uppercase transition-colors hover:border-gold hover:text-gold"
           >
-            {copied ? 'Link copied' : 'Copy velanera.co/#app'}
+            {copied ? 'Link copied' : 'Copy prototype link'}
           </button>
         </div>
 
         <p className="fade-up mt-10 text-xs tracking-[0.18em] text-cream/40 uppercase">
-          Then open Velanera from your Home Screen like any other app
+          Native SwiftUI build installs later via Xcode / TestFlight
         </p>
       </div>
     </section>

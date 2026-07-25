@@ -21,7 +21,16 @@ Optimised first for:
 
 iPad and landscape are deferred until the iPhone experience is complete. Voice Concierge is the primary interaction (full-screen on launch).
 
-## Open
+## Interactive web prototype (no Mac)
+
+A high-fidelity phone showcase of this app lives at:
+
+- Local: `http://localhost:5173/velanera-app/` (with `npm run dev`)
+- Production: `https://velanera.co/velanera-app/`
+
+Source: `public/velanera-app/`. Use it to demo Concierge, Menu, Lounge, Booking, and Membership on an iPhone without Xcode.
+
+## Open (native)
 
 ```bash
 open ios/Velanera/Velanera.xcodeproj
