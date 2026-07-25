@@ -40,7 +40,7 @@ export default function Navbar() {
                 href={link.href}
                 className={
                   link.href === '#app'
-                    ? 'border border-gold/50 px-4 py-2 text-xs tracking-[0.22em] text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10'
+                    ? 'border border-gold bg-gold/15 px-4 py-2 text-xs tracking-[0.22em] text-gold uppercase transition-colors hover:bg-gold hover:text-ink'
                     : 'text-sm tracking-[0.22em] text-cream/80 uppercase transition-colors hover:text-gold'
                 }
               >
@@ -58,17 +58,25 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <button
-          type="button"
-          className="text-gold md:hidden"
-          aria-label="Toggle menu"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="block h-0.5 w-7 bg-gold" />
-          <span className="mt-1.5 block h-0.5 w-7 bg-gold" />
-          <span className="mt-1.5 block h-0.5 w-7 bg-gold" />
-        </button>
+        <div className="flex items-center gap-3 md:hidden">
+          <a
+            href="#app"
+            className="border border-gold bg-gold px-3 py-1.5 text-[10px] tracking-[0.18em] text-ink uppercase"
+          >
+            Get the App
+          </a>
+          <button
+            type="button"
+            className="text-gold"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="block h-0.5 w-7 bg-gold" />
+            <span className="mt-1.5 block h-0.5 w-7 bg-gold" />
+            <span className="mt-1.5 block h-0.5 w-7 bg-gold" />
+          </button>
+        </div>
       </nav>
 
       {open && (
@@ -80,7 +88,7 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
                 className={
                   link.href === '#app'
-                    ? 'mt-2 block border border-gold/50 px-4 py-3 text-center text-sm tracking-[0.22em] text-gold uppercase'
+                    ? 'mt-2 block border border-gold bg-gold px-4 py-3 text-center text-sm tracking-[0.22em] text-ink uppercase'
                     : 'block py-2 text-sm tracking-[0.22em] text-cream/80 uppercase hover:text-gold'
                 }
               >
