@@ -109,56 +109,128 @@
     el.textContent = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   }
 
-  /** Prefer a warm, intimate female host voice (device-dependent). */
+  let hostAudio = null;
+
+  /**
+   * Avoid Samantha / default en-US — on iPhone that IS the stock voice,
+   * so preferring it made the “new voice” sound identical.
+   * Prefer distinctly different female accents when neural TTS isn’t available.
+   */
   function pickHostVoice() {
     const voices = window.speechSynthesis?.getVoices?.() || [];
     if (!voices.length) return null;
+    const skip = /samantha|alex|daniel|arthur|aaron|fred|male/i;
     const preferred = [
-      /samantha/i,
+      /karen/i, // en-AU
+      /moira/i, // en-IE
+      /tessa/i, // en-ZA
+      /fiona/i,
+      /martha/i,
+      /catherine/i,
+      /google uk english female/i,
+      /google aussie/i,
+      /microsoft libby/i,
+      /microsoft sonia/i,
       /ava/i,
       /zoe/i,
-      /karen/i,
-      /moira/i,
-      /victoria/i,
-      /google uk english female/i,
-      /google us english female/i,
-      /microsoft zira/i,
-      /female/i,
     ];
     for (const re of preferred) {
-      const hit = voices.find((v) => re.test(v.name));
+      const hit = voices.find((v) => re.test(v.name) && !skip.test(v.name));
       if (hit) return hit;
     }
     return (
-      voices.find((v) => /en(-|_)?(GB|US)/i.test(v.lang) && !/male/i.test(v.name)) ||
-      voices.find((v) => /^en/i.test(v.lang)) ||
+      voices.find((v) => /en-AU/i.test(v.lang) && !skip.test(v.name)) ||
+      voices.find((v) => /en-IE/i.test(v.lang) && !skip.test(v.name)) ||
+      voices.find((v) => /en-GB/i.test(v.lang) && !skip.test(v.name)) ||
+      voices.find((v) => /^en/i.test(v.lang) && !skip.test(v.name)) ||
       null
     );
   }
 
-  function speak(text) {
-    if (!window.speechSynthesis) return;
+  function stopSpeak() {
     try {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      const voice = pickHostVoice();
-      if (voice) u.voice = voice;
-      u.lang = voice?.lang || "en-GB";
-      // Slower, slightly lower — soft late-evening host presence
-      u.rate = 0.86;
-      u.pitch = 0.88;
-      u.volume = 1;
-      window.speechSynthesis.speak(u);
+      window.speechSynthesis?.cancel();
+    } catch {
+      /* ignore */
+    }
+    if (hostAudio) {
+      try {
+        hostAudio.pause();
+        hostAudio.removeAttribute("src");
+        hostAudio.load();
+      } catch {
+        /* ignore */
+      }
+      hostAudio = null;
+    }
+  }
+
+  function speakLocal(text) {
+    if (!window.speechSynthesis) return;
+    const u = new SpeechSynthesisUtterance(text);
+    const voice = pickHostVoice();
+    if (voice) {
+      u.voice = voice;
+      u.lang = voice.lang;
+    } else {
+      // Force a non-US English voice pipeline on iOS when names aren’t exposed
+      u.lang = "en-AU";
+    }
+    u.rate = 0.78;
+    u.pitch = 0.72;
+    u.volume = 1;
+    window.speechSynthesis.speak(u);
+  }
+
+  async function speakNeural(text) {
+    const base = String(window.VELANERA_CONFIG?.conciergeApiBase || "").replace(/\/$/, "");
+    if (!base) return false;
+    const res = await fetch(`${base}/tts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) throw new Error(`TTS ${res.status}`);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    stopSpeak();
+    hostAudio = new Audio(url);
+    hostAudio.playsInline = true;
+    await hostAudio.play();
+    hostAudio.addEventListener(
+      "ended",
+      () => {
+        URL.revokeObjectURL(url);
+      },
+      { once: true }
+    );
+    return true;
+  }
+
+  async function speak(text) {
+    stopSpeak();
+    try {
+      if (await speakNeural(text)) return;
+    } catch (err) {
+      console.warn("Neural host voice unavailable, using on-device voice", err);
+    }
+    try {
+      speakLocal(text);
     } catch {
       /* optional */
     }
   }
 
-  // Chrome/Safari populate voices asynchronously
   if (window.speechSynthesis) {
     window.speechSynthesis.addEventListener?.("voiceschanged", () => {
       pickHostVoice();
     });
+    // Prime voice list (Safari often needs this)
+    try {
+      window.speechSynthesis.getVoices();
+    } catch {
+      /* ignore */
+    }
   }
 
   /* ——— Onboarding ——— */
@@ -684,7 +756,7 @@
     if (state.listening || state.processing) return;
     state.listening = true;
     state.interim = "";
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    stopSpeak();
 
     const btn = $("#holdTalk");
     btn.classList.add("recording");
