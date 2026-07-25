@@ -32,12 +32,15 @@ Respond ONLY with compact JSON:
 
 suggestedActions may include: "open-menu", "open-lounge", "open-book", "open-member" (only when helpful).`;
 
+const TTS_INSTRUCTIONS =
+  "Speak as a warm, intimate luxury restaurant hostess. Soft, slightly breathy, slow, and alluring — never cartoonish. Late-evening velvet tone.";
+
 function corsHeaders(origin, allowed) {
   const list = allowed.split(",").map((s) => s.trim()).filter(Boolean);
   const ok = origin && list.includes(origin) ? origin : list[0] || "*";
   return {
     "Access-Control-Allow-Origin": ok,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -131,6 +134,59 @@ async function chatWithOpenAI(env, transcript, history) {
   };
 }
 
+async function speakWithOpenAI(env, text) {
+  const key = env.OPENAI_API_KEY;
+  if (!key) {
+    const err = new Error("OPENAI_API_KEY is not configured on the worker");
+    err.status = 503;
+    throw err;
+  }
+
+  const voice = env.OPENAI_TTS_VOICE || "coral";
+  const model = env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";
+
+  const res = await fetch("https://api.openai.com/v1/audio/speech", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      voice,
+      input: String(text).slice(0, 4096),
+      instructions: TTS_INSTRUCTIONS,
+      response_format: "mp3",
+    }),
+  });
+
+  if (!res.ok) {
+    // Fallback for accounts that only have classic TTS
+    const fallback = await fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "tts-1-hd",
+        voice: voice === "coral" ? "nova" : voice,
+        input: String(text).slice(0, 4096),
+        response_format: "mp3",
+      }),
+    });
+    if (!fallback.ok) {
+      const payload = await fallback.json().catch(() => ({}));
+      const err = new Error(payload?.error?.message || `TTS error ${fallback.status}`);
+      err.status = 502;
+      throw err;
+    }
+    return fallback.arrayBuffer();
+  }
+
+  return res.arrayBuffer();
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -141,20 +197,45 @@ export default {
     }
 
     const url = new URL(request.url);
-    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/health")) {
-      return json(
-        {
-          ok: true,
-          service: "velanera-concierge",
-          model: env.OPENAI_MODEL || "gpt-4.1",
-          openaiConfigured: Boolean(env.OPENAI_API_KEY),
-        },
-        200,
-        cors
-      );
+    if (request.method === "GET" && url.pathname === "/health") {
+      if (!env.OPENAI_API_KEY) {
+        return json({ status: "error", error: "OPENAI_API_KEY missing" }, 503, cors);
+      }
+      return json({ status: "ok" }, 200, cors);
     }
 
-    if (request.method !== "POST" || url.pathname !== "/concierge/chat") {
+    if (request.method === "POST" && url.pathname === "/tts") {
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ error: "Invalid JSON body" }, 400, cors);
+      }
+      const text = String(body?.text || body?.transcript || "").trim();
+      if (!text) return json({ error: "text is required" }, 400, cors);
+      try {
+        const audio = await speakWithOpenAI(env, text);
+        return new Response(audio, {
+          status: 200,
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Cache-Control": "no-store",
+            ...cors,
+          },
+        });
+      } catch (err) {
+        return json(
+          { error: err.message || "TTS unavailable" },
+          err.status || 500,
+          cors
+        );
+      }
+    }
+
+    const isChat =
+      request.method === "POST" &&
+      (url.pathname === "/chat" || url.pathname === "/concierge/chat");
+    if (!isChat) {
       return json({ error: "Not found" }, 404, cors);
     }
 
@@ -165,7 +246,7 @@ export default {
       return json({ error: "Invalid JSON body" }, 400, cors);
     }
 
-    const transcript = String(body?.transcript || "").trim();
+    const transcript = String(body?.transcript || body?.message || "").trim();
     if (!transcript) {
       return json({ error: "transcript is required" }, 400, cors);
     }
