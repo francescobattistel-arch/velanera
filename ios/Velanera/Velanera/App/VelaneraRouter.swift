@@ -50,6 +50,14 @@ struct VelaneraRouter: ViewModifier {
                     StaffRequestStatusView()
                 case .conciergeArchive:
                     ConciergeArchiveView()
+                case .openingHours:
+                    OpeningHoursView()
+                case .location:
+                    LocationView()
+                case .privacy:
+                    LegalDocumentView(document: .privacy)
+                case .terms:
+                    LegalDocumentView(document: .terms)
                 }
             }
     }

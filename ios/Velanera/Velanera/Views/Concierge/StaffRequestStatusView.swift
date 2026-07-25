@@ -16,11 +16,11 @@ struct StaffRequestStatusView: View {
                     .foregroundStyle(VelaneraColors.secondaryText)
 
                 if requests.isEmpty {
-                    GlassCard {
-                        Text("No staff requests yet. Ask the concierge for something bespoke.")
-                            .font(VelaneraTypography.caption())
-                            .foregroundStyle(VelaneraColors.secondaryText)
-                    }
+                    EmptyStateView(
+                        title: "No staff requests",
+                        message: "Ask the concierge for something bespoke and it will appear here for review.",
+                        systemImage: "tray"
+                    )
                 } else {
                     ForEach(requests) { request in
                         GlassCard {

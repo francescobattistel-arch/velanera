@@ -30,6 +30,11 @@ struct PrivateEventRequestView: View {
                     .foregroundStyle(VelaneraColors.secondaryText)
 
                 LuxuryButton(title: "Start Private Request", systemImage: "calendar") {
+                    environment.bookingDraft.prefill(
+                        venue: .privateEvent,
+                        occasion: "Private event",
+                        note: "Private area request via lounge"
+                    )
                     selectedTab = .book
                 }
             }

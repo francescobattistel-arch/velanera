@@ -86,6 +86,22 @@ enum MockConciergeAI {
             )
         }
 
+        if matches(text, ["event", "jazz", "concert", "rsvp", "tonight's music"]) {
+            return ConciergeResponse(
+                reply: "We have live jazz, DJ evenings, and members’ tastings ahead. Tell me which night suits you and I’ll help with an RSVP.",
+                shouldCreateStaffRequest: false,
+                staffRequestSummary: nil
+            )
+        }
+
+        if matches(text, ["private event", "buyout", "hire the room", "library", "founders"]) {
+            return ConciergeResponse(
+                reply: "Private evenings are a specialty — The Library or Founders’ Chamber. Share your date and guest count and I’ll open a staff-reviewed request.",
+                shouldCreateStaffRequest: true,
+                staffRequestSummary: transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+            )
+        }
+
         if history.isEmpty {
             return ConciergeResponse(
                 reply: "Welcome to Velanera. I’m your concierge — for dining, the lounge, membership, or something rather special. How may I look after you?",

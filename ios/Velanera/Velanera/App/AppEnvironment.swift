@@ -15,6 +15,7 @@ final class AppEnvironment {
     let permissionService: PermissionServiceProtocol
     let paymentService: PaymentServiceProtocol
     let settingsStore: SettingsStore
+    let bookingDraft: BookingDraft
 
     init(
         apiClient: APIClientProtocol,
@@ -26,7 +27,8 @@ final class AppEnvironment {
         analyticsService: AnalyticsServiceProtocol,
         permissionService: PermissionServiceProtocol,
         paymentService: PaymentServiceProtocol,
-        settingsStore: SettingsStore
+        settingsStore: SettingsStore,
+        bookingDraft: BookingDraft
     ) {
         self.apiClient = apiClient
         self.authService = authService
@@ -38,6 +40,7 @@ final class AppEnvironment {
         self.permissionService = permissionService
         self.paymentService = paymentService
         self.settingsStore = settingsStore
+        self.bookingDraft = bookingDraft
     }
 
     /// Production composition root with mock networking until a backend ships.
@@ -55,7 +58,8 @@ final class AppEnvironment {
             analyticsService: AnalyticsService(),
             permissionService: PermissionService(),
             paymentService: PaymentService(),
-            settingsStore: SettingsStore()
+            settingsStore: SettingsStore(),
+            bookingDraft: BookingDraft()
         )
     }
 }
