@@ -17,12 +17,18 @@ export default function Hero() {
           cocktails, and golden-hour ambiance by the water.
         </p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
           <a
             href="#booking"
             className="w-full border border-gold bg-gold px-8 py-3 text-sm tracking-[0.22em] text-ink uppercase transition-colors hover:bg-transparent hover:text-gold sm:w-auto"
           >
             Book a Table
+          </a>
+          <a
+            href="#app"
+            className="w-full border border-gold/70 px-8 py-3 text-sm tracking-[0.22em] text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10 sm:w-auto"
+          >
+            Get the App
           </a>
           <a
             href="#lounge"
@@ -31,6 +37,9 @@ export default function Hero() {
             Explore the Lounge
           </a>
         </div>
+        <p className="mt-5 text-xs tracking-[0.16em] text-cream/40 uppercase">
+          iPhone · Safari · Add to Home Screen · not App Store
+        </p>
       </div>
 
       <a
