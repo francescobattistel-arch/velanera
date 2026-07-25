@@ -188,8 +188,6 @@
     if (voice) {
       u.voice = voice;
       u.lang = voice.lang;
-      // iOS also keys off voiceURI
-      if (voice.voiceURI) u.voiceURI = voice.voiceURI;
       activeHostVoiceName = `${voice.name} (${voice.lang})`;
     } else {
       u.lang = "it-IT";
@@ -273,6 +271,7 @@
   }
 
   function nextOnboard() {
+    unlockSpeech();
     if (state.onboardStep < ONBOARD.length - 1) {
       state.onboardStep += 1;
       paintOnboarding();
@@ -781,6 +780,7 @@
   function startListen(e) {
     e.preventDefault();
     if (state.listening || state.processing) return;
+    unlockSpeech();
     state.listening = true;
     state.interim = "";
     stopSpeak();
