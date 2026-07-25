@@ -227,6 +227,8 @@ img { display: block; max-width: 100%; }
   font-size: 1.35rem;
 }
 .sub { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+.sub.online { color: var(--success); }
+.sub.offline { color: var(--muted); }
 .icon-btn {
   width: 44px; height: 44px;
   border-radius: 22px;

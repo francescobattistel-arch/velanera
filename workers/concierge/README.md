@@ -1,55 +1,37 @@
-# Velanera Concierge API (OpenAI)
+# Velanera Concierge API (OpenAI GPT-5.5)
 
-GitHub Pages is static — the browser **must not** hold an OpenAI key. This Cloudflare Worker is the server-side proxy that calls GPT and returns concierge replies.
+Cloudflare Worker proxy. The static site and iOS app never hold `OPENAI_API_KEY`.
 
-## Why this exists
+## Endpoints
 
-- Web prototype + future iOS app → `POST /concierge/chat`
-- Worker attaches `OPENAI_API_KEY` and calls OpenAI (`gpt-4.1` by default)
-- Matches `ios/Velanera/.../OpenAIIntegrationNotes.swift`
+- `GET /health` → `{"status":"ok"}`
+- `POST /chat` → GPT-5.5 concierge JSON (`reply`, `model`, …)
 
-## One-time setup
+## Required GitHub Actions secrets
 
-1. Create a free [Cloudflare](https://dash.cloudflare.com) account.
-2. Install Wrangler and log in:
+| Secret name | Where to create it | Why it is needed |
+|---|---|---|
+| `OPENAI_API_KEY` | GitHub → Settings → Secrets and variables → Actions → Secrets (from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)) | Worker calls OpenAI GPT-5.5. Bound into the Worker with `wrangler secret put` — never hardcoded. |
+| `CLOUDFLARE_API_TOKEN` | GitHub → Settings → Secrets and variables → Actions → Secrets (from [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens), permission **Edit Cloudflare Workers**) | Authenticates `wrangler deploy` from GitHub Actions. |
+| `CLOUDFLARE_ACCOUNT_ID` | GitHub → Settings → Secrets and variables → Actions → Secrets (Cloudflare dashboard → Workers → Account ID) | Selects which Cloudflare account receives the Worker. |
 
-```bash
-cd workers/concierge
-npx wrangler login
-npx wrangler secret put OPENAI_API_KEY
-npx wrangler deploy
-```
+No API key belongs in the repo, Pages bundle, or iOS binary.
 
-3. Copy the worker URL (e.g. `https://velanera-concierge.<account>.workers.dev`).
-4. In the GitHub repo → **Settings → Secrets and variables → Actions → Variables**:
-   - `CONCIERGE_API_BASE` = that URL (no trailing slash)
-5. Optional GitHub **Secrets** for CI deploy:
-   - `CLOUDFLARE_API_TOKEN`
-   - `CLOUDFLARE_ACCOUNT_ID`
-   - `OPENAI_API_KEY`
+## Deploy
 
-Push to `main` (or re-run **Deploy Concierge API**) so Pages picks up the base URL.
+Actions → **Deploy Concierge API** (or push to `main` under `workers/concierge/**`).
+
+The workflow:
+
+1. Puts `OPENAI_API_KEY` into the Worker environment as a secret
+2. Deploys the Worker
+3. Verifies `GET /health` and `POST /chat`
+4. Rebuilds GitHub Pages with `conciergeApiBase` set (removes demo mode)
 
 ## Local
 
 ```bash
 cd workers/concierge
+npx wrangler secret put OPENAI_API_KEY
 npx wrangler dev
-```
-
-Point the prototype at `http://127.0.0.1:8787` via `public/velanera-app/config.js`.
-
-## Request
-
-```http
-POST /concierge/chat
-Content-Type: application/json
-
-{
-  "transcript": "What’s on the menu tonight?",
-  "history": [
-    { "role": "host", "text": "Welcome to Velanera…" },
-    { "role": "guest", "text": "Hello" }
-  ]
-}
 ```
