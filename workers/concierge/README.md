@@ -8,10 +8,32 @@ GitHub Pages is static — the browser **must not** hold an OpenAI key. This Clo
 - Worker attaches `OPENAI_API_KEY` and calls OpenAI (`gpt-4.1` by default)
 - Matches `ios/Velanera/.../OpenAIIntegrationNotes.swift`
 
-## One-time setup
+## Checklist (GPT will stay in demo mode until all of these are done)
 
-1. Create a free [Cloudflare](https://dash.cloudflare.com) account.
-2. Install Wrangler and log in:
+### A. GitHub Actions secrets
+Repo → **Settings → Secrets and variables → Actions → Secrets**:
+
+| Secret | Where to get it |
+|---|---|
+| `OPENAI_API_KEY` | platform.openai.com → API keys |
+| `CLOUDFLARE_API_TOKEN` | dash.cloudflare.com → My Profile → API Tokens (Workers Edit) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → Workers → right sidebar Account ID |
+
+### B. Deploy the worker
+Actions → **Deploy Concierge API** → Run workflow.  
+Copy the worker URL from the log (e.g. `https://velanera-concierge.<account>.workers.dev`).
+
+### C. Point the website at it
+Repo → **Settings → Secrets and variables → Actions → Variables**:
+
+- `CONCIERGE_API_BASE` = worker URL (**no** trailing slash)
+
+Then Actions → **Deploy to GitHub Pages** → Run workflow.
+
+### D. Verify on iPhone
+Open https://velanera.co/velanera-app/ — subtitle should say **GPT concierge**, not Demo mode.
+
+### Manual deploy (optional)
 
 ```bash
 cd workers/concierge
@@ -19,16 +41,6 @@ npx wrangler login
 npx wrangler secret put OPENAI_API_KEY
 npx wrangler deploy
 ```
-
-3. Copy the worker URL (e.g. `https://velanera-concierge.<account>.workers.dev`).
-4. In the GitHub repo → **Settings → Secrets and variables → Actions → Variables**:
-   - `CONCIERGE_API_BASE` = that URL (no trailing slash)
-5. Optional GitHub **Secrets** for CI deploy:
-   - `CLOUDFLARE_API_TOKEN`
-   - `CLOUDFLARE_ACCOUNT_ID`
-   - `OPENAI_API_KEY`
-
-Push to `main` (or re-run **Deploy Concierge API**) so Pages picks up the base URL.
 
 ## Local
 

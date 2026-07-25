@@ -11,12 +11,30 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.OPENAI_API_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Require deploy secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          missing=0
+          [ -n "$CLOUDFLARE_API_TOKEN" ] || { echo "::error::Missing secret CLOUDFLARE_API_TOKEN"; missing=1; }
+          [ -n "$CLOUDFLARE_ACCOUNT_ID" ] || { echo "::error::Missing secret CLOUDFLARE_ACCOUNT_ID"; missing=1; }
+          [ -n "$OPENAI_API_KEY" ] || { echo "::error::Missing secret OPENAI_API_KEY"; missing=1; }
+          if [ "$missing" -ne 0 ]; then
+            echo "Add the three secrets above in GitHub → Settings → Secrets and variables → Actions."
+            echo "Then re-run workflow: Deploy Concierge API."
+            echo "After deploy, set Actions variable CONCIERGE_API_BASE to the worker URL and re-run Deploy to GitHub Pages."
+            exit 1
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - name: Deploy Cloudflare Worker
         working-directory: workers/concierge
         env:
@@ -26,3 +44,4 @@ jobs:
         run: |
           npx --yes wrangler@4 deploy
           printf '%s' "$OPENAI_API_KEY" | npx --yes wrangler@4 secret put OPENAI_API_KEY
+          echo "Next: set repo Actions variable CONCIERGE_API_BASE to this worker URL (no trailing slash), then re-run Deploy to GitHub Pages."
