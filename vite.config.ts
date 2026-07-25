@@ -65,10 +65,27 @@ export default defineConfig({
         // Cache the app shell and built assets; leave mailto: booking alone
         // (mailto is handled by the OS, not the service worker).
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2,webmanifest}'],
+        // Prototype must not stick on an old cached app.js (voice experiments).
+        globIgnores: ['**/velanera-app/**'],
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api\//],
+        navigateFallbackDenylist: [/^\/api\//, /\/velanera-app\//],
         importScripts: ['./push-sw.js'],
         runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/velanera-app/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'velanera-app-prototype',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 32,
+                maxAgeSeconds: 60 * 60,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
           {
             urlPattern: ({ url }) =>
               url.origin === 'https://fonts.googleapis.com' ||

@@ -110,41 +110,50 @@
   }
 
   let hostAudio = null;
+  let speechUnlocked = false;
+  let activeHostVoiceName = "";
 
   /**
-   * Avoid Samantha / default en-US — on iPhone that IS the stock voice,
-   * so preferring it made the “new voice” sound identical.
-   * Prefer distinctly different female accents when neural TTS isn’t available.
+   * iPhone Safari only allows ONE selectable voice per locale.
+   * en-US always maps to Samantha (stock) — so we never use en-US.
+   * Prefer Italian (Alice) speaking English: clearly different + Mediterranean.
+   * Fallback: Moira (Irish) → Karen (AU) → Tessa (ZA).
+   * @see https://talkrapp.com/speechSynthesis.html
    */
   function pickHostVoice() {
     const voices = window.speechSynthesis?.getVoices?.() || [];
     if (!voices.length) return null;
-    const skip = /samantha|alex|daniel|arthur|aaron|fred|male/i;
-    const preferred = [
-      /karen/i, // en-AU
-      /moira/i, // en-IE
-      /tessa/i, // en-ZA
-      /fiona/i,
-      /martha/i,
-      /catherine/i,
-      /google uk english female/i,
-      /google aussie/i,
-      /microsoft libby/i,
-      /microsoft sonia/i,
-      /ava/i,
-      /zoe/i,
-    ];
-    for (const re of preferred) {
-      const hit = voices.find((v) => re.test(v.name) && !skip.test(v.name));
-      if (hit) return hit;
-    }
+
+    const byName = (re) => voices.find((v) => re.test(v.name));
+    const byLang = (prefix) =>
+      voices.find((v) => v.lang === prefix || v.lang.startsWith(`${prefix}-`) || v.lang.startsWith(prefix));
+
     return (
-      voices.find((v) => /en-AU/i.test(v.lang) && !skip.test(v.name)) ||
-      voices.find((v) => /en-IE/i.test(v.lang) && !skip.test(v.name)) ||
-      voices.find((v) => /en-GB/i.test(v.lang) && !skip.test(v.name)) ||
-      voices.find((v) => /^en/i.test(v.lang) && !skip.test(v.name)) ||
+      byName(/^alice$/i) ||
+      byName(/alice/i) ||
+      byLang("it-IT") ||
+      byName(/^moira$/i) ||
+      byLang("en-IE") ||
+      byName(/^karen$/i) ||
+      byLang("en-AU") ||
+      byName(/^tessa$/i) ||
+      byLang("en-ZA") ||
       null
     );
+  }
+
+  function unlockSpeech() {
+    if (speechUnlocked || !window.speechSynthesis) return;
+    try {
+      const warm = new SpeechSynthesisUtterance(" ");
+      warm.volume = 0;
+      warm.rate = 10;
+      window.speechSynthesis.speak(warm);
+      window.speechSynthesis.cancel();
+      speechUnlocked = true;
+    } catch {
+      /* ignore */
+    }
   }
 
   function stopSpeak() {
@@ -167,19 +176,34 @@
 
   function speakLocal(text) {
     if (!window.speechSynthesis) return;
-    const u = new SpeechSynthesisUtterance(text);
+    unlockSpeech();
+    const voices = window.speechSynthesis.getVoices() || [];
+    if (!voices.length) {
+      // Safari sometimes needs a tick after unlock
+      setTimeout(() => speakLocal(text), 120);
+      return;
+    }
     const voice = pickHostVoice();
+    const u = new SpeechSynthesisUtterance(text);
     if (voice) {
       u.voice = voice;
       u.lang = voice.lang;
+      // iOS also keys off voiceURI
+      if (voice.voiceURI) u.voiceURI = voice.voiceURI;
+      activeHostVoiceName = `${voice.name} (${voice.lang})`;
     } else {
-      // Force a non-US English voice pipeline on iOS when names aren’t exposed
-      u.lang = "en-AU";
+      u.lang = "it-IT";
+      activeHostVoiceName = "it-IT";
     }
-    u.rate = 0.78;
-    u.pitch = 0.72;
+    u.rate = 0.85;
+    u.pitch = 1.05;
     u.volume = 1;
+    const live = $("#liveText");
+    if (live) live.textContent = `Voice · ${activeHostVoiceName}`;
     window.speechSynthesis.speak(u);
+    u.onend = () => {
+      if (live && live.textContent.startsWith("Voice ·")) live.textContent = "";
+    };
   }
 
   async function speakNeural(text) {
@@ -195,12 +219,16 @@
     const url = URL.createObjectURL(blob);
     stopSpeak();
     hostAudio = new Audio(url);
+    hostAudio.setAttribute("playsinline", "true");
     hostAudio.playsInline = true;
+    const live = $("#liveText");
+    if (live) live.textContent = "Voice · neural host";
     await hostAudio.play();
     hostAudio.addEventListener(
       "ended",
       () => {
         URL.revokeObjectURL(url);
+        if (live && live.textContent === "Voice · neural host") live.textContent = "";
       },
       { once: true }
     );
@@ -225,7 +253,6 @@
     window.speechSynthesis.addEventListener?.("voiceschanged", () => {
       pickHostVoice();
     });
-    // Prime voice list (Safari often needs this)
     try {
       window.speechSynthesis.getVoices();
     } catch {
