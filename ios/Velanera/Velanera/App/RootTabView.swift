@@ -4,11 +4,11 @@ enum AppTab: Hashable {
     case home, restaurant, lounge, book, membership, profile
 }
 
-/// Primary tab navigation with floating AI Concierge action.
+/// Primary tab navigation with voice-first Concierge as the lead experience.
 struct RootTabView: View {
     @Environment(AppEnvironment.self) private var environment
     @State private var selectedTab: AppTab = .home
-    @State private var showConcierge = false
+    @State private var showConcierge = true
     @Namespace private var conciergeNamespace
 
     var body: some View {
@@ -55,20 +55,19 @@ struct RootTabView: View {
 
             if !showConcierge {
                 FloatingConciergeButton {
-                    withAnimation(VelaneraTheme.animationSpring) {
+                    withAnimation(ProMotion.spring()) {
                         showConcierge = true
                     }
                 }
                 .matchedGeometryEffect(id: "concierge-fab", in: conciergeNamespace)
-                .padding(.bottom, 56)
+                .padding(.bottom, 58)
                 .transition(.scale.combined(with: .opacity))
+                .safeAreaPadding(.bottom, DeviceLayout.floatingBottomClearance)
             }
         }
         .background(VelaneraColors.matteBlack.ignoresSafeArea())
-        .sheet(isPresented: $showConcierge) {
+        .fullScreenCover(isPresented: $showConcierge) {
             ConciergeView(namespace: conciergeNamespace)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
                 .presentationBackground(VelaneraColors.matteBlack)
         }
         .onAppear {

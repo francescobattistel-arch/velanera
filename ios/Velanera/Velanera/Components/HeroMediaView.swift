@@ -61,11 +61,13 @@ struct HeroMediaView: View {
             }
             .pagePadding()
             .padding(.bottom, VelaneraSpacing.xxl)
+            .safeAreaPadding(.top, 8)
         }
         .frame(maxWidth: .infinity)
-        .frame(minHeight: 520)
+        .frame(minHeight: 560)
+        .ignoresSafeArea(edges: .top)
         .onAppear {
-            withAnimation(VelaneraTheme.animationSmooth.delay(0.1)) {
+            withAnimation(ProMotion.smooth().delay(0.08)) {
                 appear = true
             }
         }

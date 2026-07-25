@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Elegant vertical history of voice concierge turns.
+/// Elegant vertical history of voice concierge turns — Dynamic Type friendly.
 struct TranscriptHistoryView: View {
     let messages: [ConciergeMessage]
 
@@ -17,12 +17,12 @@ struct TranscriptHistoryView: View {
                             ))
                     }
                 }
-                .pagePadding()
                 .padding(.vertical, VelaneraSpacing.md)
             }
+            .scrollIndicators(.hidden)
             .onChange(of: messages.count) { _, _ in
                 if let last = messages.last {
-                    withAnimation(VelaneraTheme.animationSmooth) {
+                    withAnimation(ProMotion.smooth()) {
                         proxy.scrollTo(last.id, anchor: .bottom)
                     }
                 }
@@ -31,27 +31,39 @@ struct TranscriptHistoryView: View {
     }
 
     private func messageRow(_ message: ConciergeMessage) -> some View {
-        HStack {
-            if message.role == .guest { Spacer(minLength: 48) }
+        HStack(alignment: .bottom, spacing: 10) {
+            if message.role == .guest { Spacer(minLength: 36) }
+
+            if message.role != .guest {
+                Image("ConciergeHost")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 28, height: 28)
+                    .clipShape(Circle())
+                    .overlay { Circle().strokeBorder(VelaneraColors.goldStroke, lineWidth: 1) }
+                    .accessibilityHidden(true)
+            }
 
             VStack(alignment: message.role == .guest ? .trailing : .leading, spacing: 6) {
-                Text(message.role == .guest ? "You" : "Velanera")
-                    .font(VelaneraTypography.label(10))
-                    .tracking(1.2)
+                Text(message.role == .guest ? "You" : "Concierge")
+                    .font(VelaneraTypography.labelScaled)
+                    .tracking(1.1)
                     .foregroundStyle(VelaneraColors.gold)
 
                 Text(message.text)
-                    .font(VelaneraTypography.body(15))
+                    .font(VelaneraTypography.bodyScaled)
                     .foregroundStyle(VelaneraColors.ivory)
                     .multilineTextAlignment(message.role == .guest ? .trailing : .leading)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 if message.isSpecialRequest {
                     Text("Sent for staff review")
-                        .font(VelaneraTypography.label(10))
+                        .font(VelaneraTypography.labelScaled)
                         .foregroundStyle(VelaneraColors.softGold)
                 }
             }
-            .padding(VelaneraSpacing.md)
+            .padding(.horizontal, VelaneraSpacing.md)
+            .padding(.vertical, 14)
             .background {
                 RoundedRectangle(cornerRadius: VelaneraSpacing.radiusMd, style: .continuous)
                     .fill(message.role == .guest ? VelaneraColors.elevated : VelaneraColors.glassFill)
@@ -63,8 +75,9 @@ struct TranscriptHistoryView: View {
                             )
                     }
             }
+            .accessibilityElement(children: .combine)
 
-            if message.role != .guest { Spacer(minLength: 48) }
+            if message.role != .guest { Spacer(minLength: 36) }
         }
     }
 }

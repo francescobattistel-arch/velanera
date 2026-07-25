@@ -6,9 +6,15 @@ extension View {
         modifier(LuxuryAppearModifier(delay: delay))
     }
 
-    /// Standard horizontal page padding.
+    /// Standard horizontal page padding for iPhone 17 portrait.
     func pagePadding() -> some View {
-        padding(.horizontal, VelaneraSpacing.lg)
+        padding(.horizontal, DeviceLayout.contentInset)
+    }
+
+    /// Ensures controls meet the minimum touch target.
+    func largeTouchTarget(minHeight: CGFloat = DeviceLayout.minTouchTarget) -> some View {
+        frame(minHeight: minHeight)
+            .contentShape(Rectangle())
     }
 
     /// Parallax-style depth on scroll offset.

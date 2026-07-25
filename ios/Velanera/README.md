@@ -10,6 +10,17 @@ This project is completely separate from `ios/VelaneraCMO/`. Do not mix the two 
 - iOS **18.0+** deployment target
 - Swift 5.10+ / SwiftUI
 
+## Reference device
+
+Optimised first for:
+
+- **iPhone 17**
+- **iOS 26.5.2**
+- **Portrait** only
+- **Dark Mode** by default
+
+iPad and landscape are deferred until the iPhone experience is complete. Voice Concierge is the primary interaction (full-screen on launch).
+
 ## Open
 
 ```bash

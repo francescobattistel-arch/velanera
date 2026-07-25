@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Expressive typography scale for a luxury hospitality surface.
+/// Dynamic Type–aware typography for the iPhone 17 reference experience.
 enum VelaneraTypography {
-    static func display(_ size: CGFloat = 44) -> Font {
+    static func display(_ size: CGFloat = 40) -> Font {
         .system(size: size, weight: .light, design: .serif)
     }
 
@@ -29,4 +29,12 @@ enum VelaneraTypography {
     static func brand(_ size: CGFloat = 36) -> Font {
         .system(size: size, weight: .ultraLight, design: .serif)
     }
+
+    /// Scaled fonts that respect Dynamic Type.
+    static var displayScaled: Font { .system(.largeTitle, design: .serif).weight(.light) }
+    static var titleScaled: Font { .system(.title2, design: .serif) }
+    static var headlineScaled: Font { .system(.title3, design: .serif).weight(.medium) }
+    static var bodyScaled: Font { .body }
+    static var captionScaled: Font { .subheadline.weight(.medium) }
+    static var labelScaled: Font { .caption.weight(.semibold) }
 }

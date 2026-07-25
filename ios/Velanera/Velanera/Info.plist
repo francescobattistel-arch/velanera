@@ -36,15 +36,16 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Velanera uses the microphone so your AI Concierge can hear reservation and hospitality requests.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
@@ -53,5 +54,9 @@
 	<string>https://api.velanera.co/v1</string>
 	<key>VELANERA_USE_MOCK_API</key>
 	<true/>
+	<key>VELANERA_REFERENCE_DEVICE</key>
+	<string>iPhone 17</string>
+	<key>VELANERA_REFERENCE_OS</key>
+	<string>26.5.2</string>
 </dict>
 </plist>

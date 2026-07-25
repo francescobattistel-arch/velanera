@@ -36,7 +36,8 @@ struct LuxuryButton: View {
             }
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, VelaneraSpacing.md)
+            .frame(minHeight: DeviceLayout.minTouchTarget)
+            .padding(.vertical, VelaneraSpacing.sm)
             .padding(.horizontal, VelaneraSpacing.lg)
             .background(background)
             .overlay {

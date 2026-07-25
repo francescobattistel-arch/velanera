@@ -1,10 +1,11 @@
 import SwiftUI
 
-/// Luxury voice concierge — press and hold, no chat composer.
+/// Voice-first AI Concierge — primary interaction for iPhone 17 portrait.
 struct ConciergeView: View {
     @Environment(AppEnvironment.self) private var environment
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     var namespace: Namespace.ID
 
     @State private var viewModel: ConciergeViewModel?
@@ -12,18 +13,28 @@ struct ConciergeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VelaneraColors.ambientGradient.ignoresSafeArea()
+                background
 
                 VStack(spacing: 0) {
                     header
+                        .padding(.top, 8)
+
                     suggestedPrompts
+                        .padding(.top, 8)
+
                     TranscriptHistoryView(messages: viewModel?.messages ?? [])
-                    Spacer(minLength: VelaneraSpacing.md)
+                        .frame(maxHeight: .infinity)
+
                     voiceStage
+                        .padding(.bottom, DeviceLayout.floatingBottomClearance)
                 }
+                .safeAreaPadding(.horizontal, DeviceLayout.contentInset)
             }
+            .toolbar(.hidden, for: .navigationBar)
             .velaneraRouter(selectedTab: .constant(.home))
+            .statusBarHidden(false)
         }
+        .persistentSystemOverlays(.automatic)
         .onAppear {
             if viewModel == nil {
                 viewModel = ConciergeViewModel(
@@ -40,17 +51,47 @@ struct ConciergeView: View {
         }
     }
 
+    private var background: some View {
+        ZStack {
+            VelaneraColors.matteBlack.ignoresSafeArea()
+            RadialGradient(
+                colors: [
+                    Color(hex: 0x2A2318).opacity(0.55),
+                    VelaneraColors.matteBlack,
+                    VelaneraColors.matteBlack
+                ],
+                center: .top,
+                startRadius: 20,
+                endRadius: 520
+            )
+            .ignoresSafeArea()
+
+            if viewModel?.isRecording == true {
+                Circle()
+                    .fill(VelaneraColors.gold.opacity(0.08))
+                    .frame(width: 340, height: 340)
+                    .blur(radius: 50)
+                    .offset(y: 180)
+                    .allowsHitTesting(false)
+            }
+        }
+    }
+
     private var header: some View {
-        HStack {
+        HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("AI Concierge")
-                    .font(VelaneraTypography.headline(22))
+                Text("Velanera")
+                    .font(VelaneraTypography.brand(28))
                     .foregroundStyle(VelaneraColors.ivory)
-                Text("Hold to speak · Release to send")
-                    .font(VelaneraTypography.caption())
+                    .tracking(6)
+                Text("Your concierge is listening")
+                    .font(VelaneraTypography.captionScaled)
                     .foregroundStyle(VelaneraColors.secondaryText)
             }
-            Spacer()
+            .accessibilityElement(children: .combine)
+
+            Spacer(minLength: 8)
+
             Menu {
                 NavigationLink(value: AppDestination.staffRequests) {
                     Label("Staff requests", systemImage: "tray.full")
@@ -60,22 +101,27 @@ struct ConciergeView: View {
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")
+                    .font(.system(size: 22, weight: .regular))
                     .foregroundStyle(VelaneraColors.champagne)
-                    .padding(10)
+                    .frame(width: DeviceLayout.minTouchTarget, height: DeviceLayout.minTouchTarget)
+                    .contentShape(Rectangle())
             }
+            .accessibilityLabel("Concierge options")
+
             Button {
+                HapticFeedback.light()
                 environment.voicePlayback.stop()
                 dismiss()
             } label: {
                 Image(systemName: "xmark")
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(VelaneraColors.champagne)
-                    .padding(10)
-                    .glassBackground(cornerRadius: 20, opacity: 0.05)
+                    .frame(width: DeviceLayout.minTouchTarget, height: DeviceLayout.minTouchTarget)
+                    .glassBackground(cornerRadius: 24, opacity: 0.05)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Close concierge")
         }
-        .pagePadding()
-        .padding(.top, VelaneraSpacing.md)
         .matchedGeometryEffect(id: "concierge-fab", in: namespace)
     }
 
@@ -83,61 +129,67 @@ struct ConciergeView: View {
     private var suggestedPrompts: some View {
         if viewModel?.isRecording != true, viewModel?.isProcessing != true {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     ForEach(viewModel?.suggestedPrompts ?? [], id: \.self) { prompt in
                         Button {
+                            HapticFeedback.light()
                             Task { await viewModel?.sendSuggestion(prompt, modelContext: modelContext) }
                         } label: {
                             Text(prompt)
-                                .font(VelaneraTypography.label(11))
+                                .font(VelaneraTypography.captionScaled)
                                 .foregroundStyle(VelaneraColors.champagne)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(VelaneraColors.elevated)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 12)
+                                .frame(minHeight: DeviceLayout.minTouchTarget)
+                                .background(VelaneraColors.elevated.opacity(0.9))
                                 .clipShape(Capsule())
+                                .overlay {
+                                    Capsule().strokeBorder(VelaneraColors.glassStroke, lineWidth: 1)
+                                }
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .pagePadding()
+                .padding(.vertical, 4)
             }
-            .padding(.vertical, VelaneraSpacing.sm)
+            .transition(.opacity.combined(with: .move(edge: .top)))
         }
     }
 
     private var voiceStage: some View {
-        VStack(spacing: VelaneraSpacing.lg) {
+        VStack(spacing: VelaneraSpacing.md) {
             WaveformView(
-                levels: viewModel?.audioLevels ?? Array(repeating: 0.12, count: 24),
+                levels: viewModel?.audioLevels ?? Array(repeating: 0.12, count: 28),
                 isActive: viewModel?.isRecording == true
             )
-            .opacity((viewModel?.isRecording == true || viewModel?.isProcessing == true) ? 1 : 0.35)
-            .animation(VelaneraTheme.animationSmooth, value: viewModel?.isRecording)
+            .frame(height: 56)
+            .opacity((viewModel?.isRecording == true || viewModel?.isProcessing == true) ? 1 : 0.3)
+            .animation(reduceMotion ? nil : ProMotion.smooth(duration: 0.25), value: viewModel?.isRecording)
 
             if let live = viewModel?.liveTranscript, !live.isEmpty {
                 Text(live)
-                    .font(VelaneraTypography.body(15))
+                    .font(VelaneraTypography.bodyScaled)
                     .foregroundStyle(VelaneraColors.champagne)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, VelaneraSpacing.xl)
+                    .padding(.horizontal, 8)
                     .transition(.opacity)
+                    .accessibilityLabel("Live transcription")
             }
 
             if let error = viewModel?.errorMessage {
                 Text(error)
-                    .font(VelaneraTypography.caption())
+                    .font(VelaneraTypography.captionScaled)
                     .foregroundStyle(VelaneraColors.danger)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal)
             }
 
             if let request = viewModel?.latestStaffRequest {
                 NavigationLink(value: AppDestination.staffRequests) {
-                    Text("Staff review created · \(request.summary)")
-                        .font(VelaneraTypography.label(11))
+                    Text("Staff review · \(request.summary)")
+                        .font(VelaneraTypography.labelScaled)
                         .foregroundStyle(VelaneraColors.gold)
-                        .padding(.horizontal)
                         .multilineTextAlignment(.center)
+                        .frame(minHeight: 44)
                 }
             }
 
@@ -151,19 +203,7 @@ struct ConciergeView: View {
                     Task { await viewModel?.endHoldToTalk(modelContext: modelContext) }
                 }
             )
-
-            Text(
-                viewModel?.isRecording == true
-                ? "Listening…"
-                : viewModel?.isProcessing == true
-                ? "Composing reply…"
-                : "Press & hold"
-            )
-            .font(VelaneraTypography.label(11))
-            .tracking(2)
-            .foregroundStyle(VelaneraColors.tertiaryText)
-            .textCase(.uppercase)
+            .padding(.top, 4)
         }
-        .padding(.bottom, VelaneraSpacing.xxl)
     }
 }

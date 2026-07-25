@@ -60,6 +60,7 @@
 		E350F5494B4BDCC70E39FD0B /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEC046A26DDF839B25A45AF /* SettingsStore.swift */; };
 		24CD9406FAF172A16C6574F3 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0EA84EFCCC9C8CD01F5B04 /* SpeechRecognizer.swift */; };
 		4467A2BD5387E569C6D08066 /* VoicePlaybackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A23A487CE7F64A873C68E5 /* VoicePlaybackService.swift */; };
+		C5EAB59CE6C0FF9B7098A58C /* DeviceLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB790205295BD0E22B64DC8B /* DeviceLayout.swift */; };
 		284C85351209E1126D174026 /* GlassModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034AF65AC44AA299EF6BB87 /* GlassModifier.swift */; };
 		9F59F2E3423419EC88E70719 /* VelaneraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EFCB5E837550CFB8E559277 /* VelaneraColors.swift */; };
 		17E577AA5F7CF35F37E5F954 /* VelaneraSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E51CB495FEBBA1184F2C219 /* VelaneraSpacing.swift */; };
@@ -165,6 +166,7 @@
 		FDEC046A26DDF839B25A45AF /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		BF0EA84EFCCC9C8CD01F5B04 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		C5A23A487CE7F64A873C68E5 /* VoicePlaybackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePlaybackService.swift; sourceTree = "<group>"; };
+		CB790205295BD0E22B64DC8B /* DeviceLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLayout.swift; sourceTree = "<group>"; };
 		D034AF65AC44AA299EF6BB87 /* GlassModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassModifier.swift; sourceTree = "<group>"; };
 		6EFCB5E837550CFB8E559277 /* VelaneraColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelaneraColors.swift; sourceTree = "<group>"; };
 		4E51CB495FEBBA1184F2C219 /* VelaneraSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelaneraSpacing.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				6BF6F82C063A458E4706B7B0 /* VelaneraTheme.swift */;
 				6EFCB5E837550CFB8E559277 /* VelaneraColors.swift */;
 				7E76BEFAA8FCA4F0E71D2B5F /* VelaneraTypography.swift */;
+				CB790205295BD0E22B64DC8B /* DeviceLayout.swift */;
 				D034AF65AC44AA299EF6BB87 /* GlassModifier.swift */;
 			);
 			path = Theme;
@@ -661,6 +664,7 @@
 				E350F5494B4BDCC70E39FD0B /* SettingsStore.swift in Sources */,
 				24CD9406FAF172A16C6574F3 /* SpeechRecognizer.swift in Sources */,
 				4467A2BD5387E569C6D08066 /* VoicePlaybackService.swift in Sources */,
+				C5EAB59CE6C0FF9B7098A58C /* DeviceLayout.swift in Sources */,
 				284C85351209E1126D174026 /* GlassModifier.swift in Sources */,
 				9F59F2E3423419EC88E70719 /* VelaneraColors.swift in Sources */,
 				17E577AA5F7CF35F37E5F954 /* VelaneraSpacing.swift in Sources */,
@@ -774,7 +778,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 			};
 			name = Debug;
 		};
@@ -804,7 +811,10 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 			};
 			name = Release;
 		};

@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// Application entry point for the Velanera guest experience.
+/// Application entry point — iPhone 17 portrait, Dark Mode, voice-first.
 @main
 struct VelaneraApp: App {
     @State private var appEnvironment = AppEnvironment.live
@@ -27,6 +27,9 @@ struct VelaneraApp: App {
                 .environment(appEnvironment)
                 .preferredColorScheme(.dark)
                 .tint(VelaneraColors.gold)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
+                .statusBarHidden(false)
+                .persistentSystemOverlays(.automatic)
         }
         .modelContainer(sharedModelContainer)
     }
