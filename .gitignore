@@ -27,3 +27,5 @@ DerivedData/
 timeline.xctimeline
 playground.xcworkspace
 .build/
+__pycache__/
+*.pyc
