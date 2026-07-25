@@ -1,0 +1,8 @@
+# App Store Connect identity for Velanera iOS.
+# Prefer environment variables over hardcoding.
+
+app_identifier(ENV.fetch("VELANERA_BUNDLE_ID", "co.velanera.app"))
+apple_id(ENV["APPLE_ID"]) if ENV["APPLE_ID"]
+team_id(ENV.fetch("APPLE_TEAM_ID", ""))
+
+itc_team_id(ENV["APP_STORE_CONNECT_TEAM_ID"]) if ENV["APP_STORE_CONNECT_TEAM_ID"]

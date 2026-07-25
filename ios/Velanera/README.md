@@ -72,3 +72,11 @@ xcodebuild -project ios/Velanera/Velanera.xcodeproj \
   -destination 'platform=iOS Simulator,name=iPhone 16' \
   build
 ```
+
+## TestFlight
+
+See [`TESTFLIGHT.md`](./TESTFLIGHT.md). Summary:
+
+1. Create App ID + App Store Connect app for `co.velanera.app` (enable Sign in with Apple).
+2. Add ASC API key secrets to GitHub (`APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`).
+3. Run Actions → **iOS TestFlight**, or on a Mac: `cd ios/Velanera && fastlane beta`.
