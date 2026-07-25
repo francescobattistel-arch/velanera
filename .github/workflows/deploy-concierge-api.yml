@@ -1,0 +1,28 @@
+name: Deploy Concierge API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "workers/concierge/**"
+      - ".github/workflows/deploy-concierge-api.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' && secrets.OPENAI_API_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Deploy Cloudflare Worker
+        working-directory: workers/concierge
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npx --yes wrangler@4 deploy
+          echo "${{ secrets.OPENAI_API_KEY }}" | npx --yes wrangler@4 secret put OPENAI_API_KEY

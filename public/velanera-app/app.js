@@ -461,21 +461,90 @@
     return `${String(h).padStart(2, "0")}:${mins}`;
   }
 
-  function handleGuestUtterance(text) {
+  function apiBase() {
+    return String(window.VELANERA_CONFIG?.conciergeApiBase || "").replace(/\/$/, "");
+  }
+
+  function usingGPT() {
+    return Boolean(apiBase());
+  }
+
+  function updateConciergeSub() {
+    const el = $("#conciergeSub");
+    if (!el) return;
+    el.textContent = usingGPT()
+      ? "GPT concierge · hold or type"
+      : "Demo mode · connect OpenAI worker for GPT";
+  }
+
+  function actionsFromIds(ids) {
+    const labels = {
+      "open-menu": "Open menu",
+      "open-lounge": "Open lounge",
+      "open-book": "Open booking",
+      "open-member": "View membership",
+    };
+    return (ids || [])
+      .filter((id) => labels[id])
+      .map((id) => ({ id, label: labels[id] }));
+  }
+
+  async function askOpenAI(transcript) {
+    const base = apiBase();
+    if (!base) return null;
+
+    const history = state.messages
+      .filter((m) => m.role === "guest" || m.role === "host")
+      .slice(0, -1) // exclude the guest turn we just pushed
+      .slice(-20)
+      .map((m) => ({ role: m.role, text: m.text }));
+
+    const res = await fetch(`${base}/concierge/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ transcript, history }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || `Concierge API ${res.status}`);
+    }
+    return {
+      reply: data.reply || "How may I look after you?",
+      actions: actionsFromIds(data.suggestedActions),
+    };
+  }
+
+  async function handleGuestUtterance(text) {
     const cleaned = text.trim();
     if (!cleaned || state.processing) return;
     state.processing = true;
-    $("#talkBadge").textContent = "Thinking…";
+    $("#talkBadge").textContent = usingGPT() ? "Asking GPT…" : "Thinking…";
     $("#holdTalk").classList.add("processing");
     pushGuest(cleaned);
 
-    setTimeout(() => {
-      const { reply, actions } = respondTo(cleaned);
-      pushHost(reply, actions);
+    try {
+      let result = null;
+      if (usingGPT()) {
+        try {
+          result = await askOpenAI(cleaned);
+        } catch (err) {
+          console.warn("Concierge API failed, using on-device fallback", err);
+          pushHost(
+            "I couldn’t reach the GPT host just now — continuing with the local concierge.",
+            []
+          );
+        }
+      }
+      if (!result) {
+        // Keep multi-turn booking locally when GPT isn’t configured
+        result = respondTo(cleaned);
+      }
+      pushHost(result.reply, result.actions || []);
+    } finally {
       state.processing = false;
       $("#talkBadge").textContent = SpeechRecognition ? "Hold to Talk" : "Hold or type";
       $("#holdTalk").classList.remove("processing");
-    }, 420);
+    }
   }
 
   function runAction(id) {
@@ -765,6 +834,7 @@
     paintLounge();
     paintSlots();
     buildWaveform();
+    updateConciergeSub();
     if (!SpeechRecognition) {
       $("#talkBadge").textContent = "Hold or type";
     }

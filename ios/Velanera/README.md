@@ -30,6 +30,16 @@ A high-fidelity phone showcase of this app lives at:
 
 Source: `public/velanera-app/`. Use it to demo Concierge, Menu, Lounge, Booking, and Membership on an iPhone without Xcode.
 
+### GPT / OpenAI Concierge
+
+OpenAI keys must **never** ship in the iOS app or the static Pages site. Production path:
+
+1. Client → Cloudflare Worker `POST /concierge/chat` (`workers/concierge/`)
+2. Worker calls OpenAI (`gpt-4.1`) with the Velanera system prompt
+3. Client renders the reply
+
+See [`workers/concierge/README.md`](../../workers/concierge/README.md). Until `CONCIERGE_API_BASE` is set, the web prototype uses the on-device mock brain.
+
 ## Open (native)
 
 ```bash
