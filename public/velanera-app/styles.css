@@ -379,6 +379,53 @@ img { display: block; max-width: 100%; }
   color: var(--black);
 }
 
+.composer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 4px;
+}
+.composer input {
+  min-height: 44px;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: var(--elevated);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+  color: var(--ivory);
+  font-size: 0.95rem;
+}
+.composer input::placeholder { color: var(--muted); }
+.composer-send {
+  min-height: 44px;
+  min-width: 64px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--champagne), var(--gold));
+  color: var(--black);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.action-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.action-chips button {
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(198,167,94,0.14);
+  color: var(--champagne);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  box-shadow: inset 0 0 0 1px rgba(198,167,94,0.4);
+}
+
 /* App shell */
 .screen-app { background: var(--black); }
 .app-scroll {

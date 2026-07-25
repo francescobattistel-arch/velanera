@@ -57,6 +57,17 @@
               <img src="./assets/concierge-host.png" alt="" />
               <span class="talk-badge" id="talkBadge">Hold to Talk</span>
             </button>
+            <form class="composer" id="composer" autocomplete="off">
+              <input
+                id="composerInput"
+                type="text"
+                enterkeyhint="send"
+                placeholder="Or type a message…"
+                maxlength="280"
+                aria-label="Message the concierge"
+              />
+              <button type="submit" class="composer-send" aria-label="Send">Send</button>
+            </form>
           </div>
         </section>
 
