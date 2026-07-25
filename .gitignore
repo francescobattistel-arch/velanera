@@ -13,3 +13,17 @@ yarn-error.log*
 .env.local
 .env.*.local
 !.env.example
+
+# Xcode / iOS
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+timeline.xctimeline
+playground.xcworkspace
+.build/

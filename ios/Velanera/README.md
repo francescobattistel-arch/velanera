@@ -1,0 +1,74 @@
+# Velanera iOS
+
+Native SwiftUI application for **Velanera Restaurant & Lounge**.
+
+This project is completely separate from `ios/VelaneraCMO/`. Do not mix the two codebases.
+
+## Requirements
+
+- macOS with **Xcode 16+**
+- iOS **18.0+** deployment target
+- Swift 5.10+ / SwiftUI
+
+## Open
+
+```bash
+open ios/Velanera/Velanera.xcodeproj
+```
+
+Select a simulator or device, then Run (`⌘R`).
+
+## Architecture
+
+- **SwiftUI** + **MVVM** + **NavigationStack**
+- **SwiftData** for local reservations, favourites, transcripts, profile cache
+- **Async/Await** + single **APIClient** (mock by default)
+- **Speech** + **AVSpeechSynthesizer** for the voice AI Concierge
+- Dark luxury design system (matte black / gold / glass)
+
+### Folders
+
+| Folder | Responsibility |
+|---|---|
+| `App/` | Composition root, tab shell |
+| `Theme/` | Colours, type, spacing, glass |
+| `Components/` | Reusable luxury UI |
+| `Models/` | Domain + SwiftData models |
+| `Views/` | Feature screens |
+| `ViewModels/` | Presentation logic |
+| `Networking/` | APIClient, mocks, configuration |
+| `Speech/` | Recognition + playback |
+| `Concierge/` | Conversation engine + persona |
+| `Services/` | Auth, permissions, notifications, analytics, payments |
+
+## Configuration
+
+`Velanera/Info.plist`:
+
+- `VELANERA_API_BASE_URL` — backend base URL
+- `VELANERA_USE_MOCK_API` — `true` until production APIs are live
+
+API keys must never be embedded in the app. OpenAI Responses API integration belongs on the server; see `Networking/OpenAIIntegrationNotes.swift`.
+
+## Regenerate Xcode project
+
+If you add/remove Swift files:
+
+```bash
+python3 ios/Velanera/Scripts/generate_xcodeproj.py
+```
+
+## Permissions
+
+- Microphone — voice concierge
+- Speech Recognition — live transcription
+- Sign in with Apple — profile identity
+
+## Build
+
+```bash
+xcodebuild -project ios/Velanera/Velanera.xcodeproj \
+  -scheme Velanera \
+  -destination 'platform=iOS Simulator,name=iPhone 16' \
+  build
+```
