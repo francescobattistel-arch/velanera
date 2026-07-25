@@ -327,11 +327,13 @@ img { display: block; max-width: 100%; }
 
 .host-talk {
   position: relative;
-  width: 188px; height: 188px;
+  width: min(156px, 38vw);
+  height: min(156px, 38vw);
   border-radius: 50%;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
+  flex-shrink: 0;
 }
 .host-talk img {
   width: 100%; height: 100%;
