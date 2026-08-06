@@ -10,9 +10,11 @@ struct RootTabView: View {
     @State private var selectedTab: AppTab = .home
     @State private var showConcierge = false
     @State private var showOnboarding = false
+    @State private var showShowcase = false
     @Namespace private var conciergeNamespace
 
     private let onboardingKey = "velanera.didCompleteOnboarding"
+    private let showcaseKey = "velanera.didSeePrototypeShowcase"
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -56,7 +58,7 @@ struct RootTabView: View {
             .toolbarBackground(.ultraThinMaterial, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
 
-            if !showConcierge && !showOnboarding {
+            if !showConcierge && !showOnboarding && !showShowcase {
                 FloatingConciergeButton {
                     withAnimation(ProMotion.spring()) {
                         showConcierge = true
@@ -69,6 +71,18 @@ struct RootTabView: View {
             }
         }
         .background(VelaneraColors.matteBlack.ignoresSafeArea())
+        .fullScreenCover(isPresented: $showShowcase) {
+            PrototypeShowcaseView {
+                UserDefaults.standard.set(true, forKey: showcaseKey)
+                showShowcase = false
+                let completed = UserDefaults.standard.bool(forKey: onboardingKey)
+                if completed {
+                    showConcierge = true
+                } else {
+                    showOnboarding = true
+                }
+            }
+        }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView {
                 UserDefaults.standard.set(true, forKey: onboardingKey)
@@ -82,15 +96,17 @@ struct RootTabView: View {
         }
         .onAppear {
             environment.analyticsService.track(event: .screenView("root"))
+            let sawShowcase = UserDefaults.standard.bool(forKey: showcaseKey)
             let completed = UserDefaults.standard.bool(forKey: onboardingKey)
-            if completed {
+            if !sawShowcase {
+                showShowcase = true
+            } else if completed {
                 showConcierge = true
             } else {
                 showOnboarding = true
             }
         }
         .onChange(of: selectedTab) { _, newTab in
-            // Apply lounge/private booking drafts when user lands on Book.
             if newTab == .book {
                 // BookView consumes draft on appear.
             }
