@@ -105,6 +105,7 @@
 		5836B230DD1D965ABE610A8C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6EEECBAC04E6E0A115AC27 /* OnboardingView.swift */; };
 		90058422AC66BC4A39A103D7 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD8E7919D76E4033E79C021 /* EditProfileView.swift */; };
 		0D28183264E1E279D009AC0D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E62B40E17545538CB384B54 /* ProfileView.swift */; };
+		579807CE5F811BD38865DAD9 /* PrototypeShowcaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07E76B99E1FDEB2D877D750 /* PrototypeShowcaseView.swift */; };
 		3262699D757E8C3C492A9EDF /* AllergenGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244E8AF4AFDD6CA9148B3301 /* AllergenGuideView.swift */; };
 		34CE70EF6BF2EA34CF001AA4 /* ChefView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDBA697394CCB21CF5EB18F /* ChefView.swift */; };
 		F029B31CE84FEF2D9A0D8194 /* CocktailListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CF2D9D812E2A825451CC9F /* CocktailListView.swift */; };
@@ -219,6 +220,7 @@
 		BA6EEECBAC04E6E0A115AC27 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3DD8E7919D76E4033E79C021 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		4E62B40E17545538CB384B54 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A07E76B99E1FDEB2D877D750 /* PrototypeShowcaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeShowcaseView.swift; sourceTree = "<group>"; };
 		244E8AF4AFDD6CA9148B3301 /* AllergenGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllergenGuideView.swift; sourceTree = "<group>"; };
 		DCDBA697394CCB21CF5EB18F /* ChefView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChefView.swift; sourceTree = "<group>"; };
 		04CF2D9D812E2A825451CC9F /* CocktailListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailListView.swift; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 			children = (
 				0D7626413CCF860C82715CA5 /* Settings */;
 				2FAEDE3E851F017B809CB742 /* Profile */;
+				3455EDAF3A1E69538766CE57 /* Prototype */;
 				394D40701680FCA248A47087 /* Restaurant */;
 				6B91405A1CDCFF4F2AD3C436 /* Membership */;
 				7AA67F4A9AB5070C95DE5337 /* Gallery */;
@@ -520,6 +523,14 @@
 				4E62B40E17545538CB384B54 /* ProfileView.swift */;
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		3455EDAF3A1E69538766CE57 /* Prototype */ = {
+			isa = PBXGroup;
+			children = (
+				A07E76B99E1FDEB2D877D750 /* PrototypeShowcaseView.swift */;
+			);
+			path = Prototype;
 			sourceTree = "<group>";
 		};
 		394D40701680FCA248A47087 /* Restaurant */ = {
@@ -738,6 +749,7 @@
 				5836B230DD1D965ABE610A8C /* OnboardingView.swift in Sources */,
 				90058422AC66BC4A39A103D7 /* EditProfileView.swift in Sources */,
 				0D28183264E1E279D009AC0D /* ProfileView.swift in Sources */,
+				579807CE5F811BD38865DAD9 /* PrototypeShowcaseView.swift in Sources */,
 				3262699D757E8C3C492A9EDF /* AllergenGuideView.swift in Sources */,
 				34CE70EF6BF2EA34CF001AA4 /* ChefView.swift in Sources */,
 				F029B31CE84FEF2D9A0D8194 /* CocktailListView.swift in Sources */,
